@@ -1,19 +1,9 @@
 package main
 
-import "fmt"
+import "container/list"
 
 func main() {
+	l := list.New()
 
-	go func() {
-		fmt.Println("hello world 1!")
-		fmt.Println("hello world 1!")
-	}()
-
-	go func() {
-		fmt.Println("hjjjj")
-		fmt.Println("hjjjj")
-		fmt.Println("hjjjj")
-	}()
-
-	fmt.Println("hello world 1!")
+	l.Front()
 }
