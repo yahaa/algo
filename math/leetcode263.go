@@ -1,4 +1,4 @@
-package main
+package math
 
 func isUgly(num int) bool {
 	if num == 0 {
