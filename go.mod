@@ -9,6 +9,7 @@ require (
 	github.com/gogo/protobuf v1.3.1 // indirect
 	github.com/golang/protobuf v1.4.2 // indirect
 	github.com/google/uuid v1.1.1 // indirect
+	github.com/pingcap/check v0.0.0-20200212061837-5e12011dc712
 	github.com/pkg/errors v0.8.1 // indirect
 	github.com/polyrabbit/etcdfs v0.0.0-20200810033402-2ed0c102de71 // indirect
 	github.com/spf13/cobra v1.0.0 // indirect

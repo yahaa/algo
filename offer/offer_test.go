@@ -109,3 +109,23 @@ func TestOffer45(t *testing.T) {
 		})
 	}
 }
+
+func TestOffer13(t *testing.T) {
+
+	tests := []struct {
+		m, n, k int
+		want    int
+	}{
+		{2, 3, 1, 3},
+		{3, 2, 17, 6},
+	}
+
+	for i, c := range tests {
+		t.Run(fmt.Sprintf("case %d", i), func(t *testing.T) {
+			res := movingCount(c.m, c.n, c.k)
+			if res != c.want {
+				t.Errorf("got %v, want %v", res, c.want)
+			}
+		})
+	}
+}
