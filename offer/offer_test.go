@@ -129,3 +129,35 @@ func TestOffer13(t *testing.T) {
 		})
 	}
 }
+
+func TestOffer48(t *testing.T) {
+
+	tests := []struct {
+		s    string
+		want int
+	}{
+		{"abc", 3},
+		{"abcabcbb", 3},
+		{"bbbbb", 1},
+		{"abba", 2},
+		{"pwwkew", 3},
+	}
+
+	for i, c := range tests {
+		t.Run(fmt.Sprintf("case %d", i), func(t *testing.T) {
+			res := lengthOfLongestSubstring(c.s)
+			if res != c.want {
+				t.Errorf("got %v, want %v", res, c.want)
+			}
+		})
+	}
+
+	for i, c := range tests {
+		t.Run(fmt.Sprintf("case %d", i), func(t *testing.T) {
+			res := lengthOfLongestSubstring2(c.s)
+			if res != c.want {
+				t.Errorf("got %v, want %v", res, c.want)
+			}
+		})
+	}
+}
