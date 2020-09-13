@@ -107,4 +107,13 @@ func TestNewBSTreeDelete(t *testing.T) {
 		})
 	}
 
+	it := NewIterator(bst)
+
+	fmt.Printf("start: %v\n", bst)
+
+	for it.HasNext() {
+		fmt.Printf("%d ", it.Next())
+	}
+	fmt.Printf("\n")
+
 }

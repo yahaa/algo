@@ -15,6 +15,61 @@ type BSTree struct {
 	root *TreeNode
 }
 
+// Iterator iterator
+type Iterator struct {
+	cur *TreeNode
+}
+
+// NewIterator new
+func NewIterator(bst *BSTree) *Iterator {
+	cur := bst.root
+
+	for cur.Left != nil {
+		cur = cur.Left
+	}
+
+	return &Iterator{cur: cur}
+}
+
+// Next next
+func (it *Iterator) Next() int {
+	if it.cur == nil {
+		return -1
+	}
+
+	res := it.cur.Val
+
+	// 结点的后继分为两种情况：
+	// 1. 如果结点x的右子树非空，那么x的后继恰是其右子树的最左结点；
+	// 2. 如果结点x的右子树为空并有一个后继y，那么y是x的最底层祖先
+	// 最底层祖先: 并且y的左孩子要么是结点x 本身，要么也是x的一个祖先。如此，我们便能找到结点x的后继
+	// 原理参考: https://zhuanlan.zhihu.com/p/67018558
+	// 实现参考: https://blog.csdn.net/FlushHip/article/details/82806003
+	if it.cur.Right != nil {
+		p := it.cur.Right
+		for p.Left != nil {
+			p = p.Left
+		}
+
+		it.cur = p
+	} else {
+		p := it.cur
+
+		for p.Father != nil && p.Father.Right == p {
+			p = p.Father
+		}
+
+		it.cur = p.Father
+	}
+
+	return res
+}
+
+// HasNext hasNext
+func (it *Iterator) HasNext() bool {
+	return it.cur != nil
+}
+
 func (bst *BSTree) String() string {
 	var inOrder func(root *TreeNode)
 	var res string
