@@ -199,3 +199,25 @@ func TestOffer10(t *testing.T) {
 		})
 	}
 }
+
+func TestOffer20(t *testing.T) {
+	tests := []struct {
+		input string
+		want  bool
+	}{
+		{"10", true},
+		{"3e2", true},
+		{"1.2.3", false},
+		{"12e+5", true},
+		{"12e+5.4", false},
+	}
+
+	for i, c := range tests {
+		t.Run(fmt.Sprintf("case %d", i), func(t *testing.T) {
+			res := isNumber(c.input)
+			if res != c.want {
+				t.Errorf("got %v, want %v", res, c.want)
+			}
+		})
+	}
+}
