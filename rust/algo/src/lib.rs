@@ -1,3 +1,4 @@
+mod bit;
 mod design;
 use std::cmp;
 use std::collections::HashMap;
@@ -489,6 +490,79 @@ impl Solution {
 
         return s;
     }
+
+    pub fn dominant_index(nums: Vec<i32>) -> i32 {
+        if nums.len() < 2 {
+            return (nums.len() - 1) as i32;
+        }
+
+        let (mut max_i, mut max_v, mut max_v_1) = (0 as usize, &std::i32::MIN, &std::i32::MIN);
+        for (i, v) in nums.iter().enumerate() {
+            if v > max_v {
+                max_i = i;
+                max_v_1 = max_v;
+                max_v = v;
+            } else if v > max_v_1 {
+                max_v_1 = v;
+            }
+        }
+
+        if *max_v_1 == 0 {
+            return max_i as i32;
+        }
+
+        if max_v / max_v_1 >= 2 {
+            return max_i as i32;
+        }
+        return -1;
+    }
+
+    // lc 136
+    pub fn single_number(nums: Vec<i32>) -> i32 {
+        if nums.len() <= 0 {
+            return 0;
+        }
+
+        let mut ans = nums[0];
+
+        for i in 1..nums.len() {
+            ans ^= nums[i];
+        }
+        ans
+    }
+
+    pub fn single_number2(nums: Vec<i32>) -> i32 {
+        let mut res = 0;
+        for i in 0..32 {
+            let mut sum = 0;
+            for n in nums.iter() {
+                sum += (n >> i) & 1;
+            }
+            res ^= (sum % 3) << i;
+        }
+        res
+    }
+
+    pub fn find_repeated_dna_sequences(s: String) -> Vec<String> {
+        if s.len() < 10 {
+            return vec![];
+        }
+        let mut rep: HashMap<&str, i32> = HashMap::new();
+
+        for i in 0..=s.len() - 10 {
+            let sb = &s[i..i + 10];
+            *rep.entry(&sb).or_insert(0) += 1;
+        }
+
+        let mut res: Vec<String> = Vec::new();
+
+        for (k, v) in rep.iter() {
+            if *v > 1 {
+                res.push(k.to_string());
+            }
+        }
+        res
+    }
 }
 
 #[cfg(test)]
@@ -612,5 +686,11 @@ mod test {
             "602",
             Solution::add_strings(String::from("584"), String::from("18"))
         );
+    }
+
+    #[test]
+    fn dominant_index() {
+        let nums = vec![3, 6, 1, 0];
+        let want = 1;
     }
 }
