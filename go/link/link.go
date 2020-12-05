@@ -49,3 +49,42 @@ func copyRandomList(head *Node) *Node {
 
 	return mp[head]
 }
+
+func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
+	head, c := &ListNode{}, 0
+	p := head
+	for l1 != nil && l2 != nil {
+		val := (l1.Val + l2.Val + c) % 10
+		c = (l1.Val + l2.Val + c) / 10
+
+		p.Next = &ListNode{Val: val}
+		p = p.Next
+		l1 = l1.Next
+		l2 = l2.Next
+	}
+
+	var last *ListNode
+
+	if l1 != nil {
+		last = l1
+	}
+
+	if l2 != nil {
+		last = l2
+	}
+
+	for last != nil {
+		val := (last.Val + c) % 10
+		c = (last.Val + c) / 10
+
+		p.Next = &ListNode{Val: val}
+		p = p.Next
+		last = last.Next
+	}
+
+	if c != 0 {
+		p.Next = &ListNode{Val: c}
+	}
+
+	return head.Next
+}
