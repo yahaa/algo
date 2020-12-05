@@ -88,3 +88,33 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 
 	return head.Next
 }
+
+func deleteDuplicates(head *ListNode) *ListNode {
+	var fakeHead = &ListNode{Val: 0}
+	var pre = fakeHead
+	var cur = head
+
+	for cur != nil {
+		var count = 1
+
+		var n = cur.Next
+
+		for n != nil && n.Val == cur.Val {
+			count++
+			n = n.Next
+		}
+
+		if count == 1 {
+			next := cur.Next
+			cur.Next = nil
+
+			pre.Next = cur
+			pre = cur
+
+			cur = next
+		} else {
+			cur = n
+		}
+	}
+	return fakeHead.Next
+}
