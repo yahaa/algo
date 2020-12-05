@@ -116,5 +116,52 @@ func Test_orderInsert(t *testing.T) {
 			}
 		})
 	}
+}
+
+func Test_reorderList(t *testing.T) {
+	tests := []struct {
+		head *ListNode
+		want *ListNode
+	}{{
+		head: &ListNode{
+			Val: 1,
+			Next: &ListNode{
+				Val: 2,
+				Next: &ListNode{
+					Val: 3,
+					Next: &ListNode{
+						Val: 4,
+					},
+				},
+			},
+		},
+		want: &ListNode{
+			Val: 1,
+			Next: &ListNode{
+				Val: 4,
+				Next: &ListNode{
+					Val: 2,
+					Next: &ListNode{
+						Val: 3,
+					},
+				},
+			},
+		},
+	}}
+
+	for i, c := range tests {
+		t.Run(fmt.Sprintf("case %d", i), func(t *testing.T) {
+			reorderList(c.head)
+
+			for c.head != nil && c.want != nil {
+				if c.head.Val != c.want.Val {
+					t.Errorf("head.Val= %v, Want.Val=%v", c.head.Val, c.want.Val)
+					break
+				}
+				c.head = c.head.Next
+				c.want = c.want.Next
+			}
+		})
+	}
 
 }

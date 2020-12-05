@@ -203,3 +203,95 @@ func sortedListToBST(head *ListNode) *TreeNode {
 		Right: sortedListToBST(mid.Next),
 	}
 }
+
+func hasCycle(head *ListNode) bool {
+	if head == nil {
+		return false
+	}
+
+	slow, fast := head, head
+
+	for fast.Next != nil && fast.Next.Next != nil {
+		fast = fast.Next.Next
+		slow = slow.Next
+
+		if fast == slow {
+			return true
+		}
+	}
+
+	return false
+}
+
+func detectCycle(head *ListNode) *ListNode {
+	if head == nil {
+		return nil
+	}
+
+	slow, fast, hasCycle := head, head, false
+
+	for fast.Next != nil && fast.Next.Next != nil {
+		fast = fast.Next.Next
+		slow = slow.Next
+
+		if fast == slow {
+			hasCycle = true
+			break
+		}
+	}
+
+	if !hasCycle {
+		return nil
+	}
+
+	for head != slow {
+		head = head.Next
+		slow = slow.Next
+	}
+
+	return head
+}
+
+func reorderList(head *ListNode) {
+	if head == nil || head.Next == nil {
+		return
+	}
+
+	slow, fast := head, head
+
+	for fast.Next != nil && fast.Next.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+	}
+
+	left, right := head, reverList(slow.Next)
+	slow.Next = nil
+
+	for left != nil && right != nil {
+		leftNext := left.Next
+		rightNext := right.Next
+
+		left.Next = right
+		right.Next = leftNext
+
+		left = leftNext
+		right = rightNext
+	}
+}
+
+func reverList(head *ListNode) *ListNode {
+	var (
+		cur = head
+		pre *ListNode
+	)
+
+	for cur != nil {
+		next := cur.Next
+		cur.Next = pre
+
+		pre = cur
+		cur = next
+	}
+
+	return pre
+}
