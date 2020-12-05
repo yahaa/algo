@@ -118,3 +118,52 @@ func deleteDuplicates(head *ListNode) *ListNode {
 	}
 	return fakeHead.Next
 }
+
+func partition(head *ListNode, x int) *ListNode {
+	var (
+		fakeLessHead = &ListNode{}
+		lessTail     = fakeLessHead
+		fakeBigHead  = &ListNode{}
+		bigTail      = fakeBigHead
+	)
+
+	for head != nil {
+		t := head
+		head = head.Next
+
+		t.Next = nil
+
+		if t.Val < x {
+			lessTail.Next = t
+			lessTail = lessTail.Next
+		} else {
+			bigTail.Next = t
+			bigTail = bigTail.Next
+		}
+	}
+
+	lessTail.Next = fakeBigHead.Next
+
+	return fakeLessHead.Next
+}
+
+func orderInsert(node *ListNode, head *ListNode) *ListNode {
+	var fakeHead = &ListNode{Next: head}
+	var pre = fakeHead
+	var index = fakeHead.Next
+
+	for index != nil {
+		// find the first node which Val >= node.Val
+		if index.Val >= node.Val {
+			break
+		}
+
+		index = index.Next
+		pre = pre.Next
+	}
+
+	pre.Next = node
+	node.Next = index
+
+	return fakeHead.Next
+}
