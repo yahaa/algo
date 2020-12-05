@@ -1,5 +1,12 @@
 package link
 
+// TreeNode 二叉搜索树
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
 // ListNode 单链表 Node
 type ListNode struct {
 	Val  int
@@ -20,6 +27,7 @@ func MiddleNode(head *ListNode) *ListNode {
 	return res
 }
 
+// Node xxx
 type Node struct {
 	Val    int
 	Next   *Node
@@ -166,4 +174,32 @@ func orderInsert(node *ListNode, head *ListNode) *ListNode {
 	node.Next = index
 
 	return fakeHead.Next
+}
+
+// leetcode 109
+// 1. classic problem that use fast and slow points to find the mid node of the linkedlist
+// 2. classic problem ths use dfs to build the binary tree
+func sortedListToBST(head *ListNode) *TreeNode {
+	if head == nil {
+		return nil
+	}
+
+	var (
+		fake       = &ListNode{Next: head}
+		slow, fast = fake, fake
+	)
+
+	for fast.Next != nil && fast.Next.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+	}
+
+	mid := slow.Next
+	slow.Next = nil
+
+	return &TreeNode{
+		Val:   mid.Val,
+		Left:  sortedListToBST(fake.Next),
+		Right: sortedListToBST(mid.Next),
+	}
 }
