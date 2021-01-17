@@ -295,3 +295,125 @@ func reverList(head *ListNode) *ListNode {
 
 	return pre
 }
+
+func insertionSortList(head *ListNode) *ListNode {
+	ascList, cur := &ListNode{}, head
+
+	for cur != nil {
+		p := ascList
+		for p.Next != nil && cur.Val >= p.Next.Val {
+			p = p.Next
+		}
+
+		t1 := p.Next
+		t2 := cur.Next
+
+		p.Next = cur
+		cur.Next = t1
+
+		cur = t2
+	}
+
+	return ascList.Next
+}
+
+func sortList(head *ListNode) *ListNode {
+	if head == nil || head.Next == nil {
+		return head
+	}
+
+	fast, slow := head, head
+
+	for fast.Next != nil && fast.Next.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+	}
+
+	right := sortList(slow.Next)
+
+	slow.Next = nil
+
+	left := sortList(head)
+
+	fake := &ListNode{}
+	cur := fake
+
+	for left != nil && right != nil {
+		if left.Val < right.Val {
+			cur.Next = left
+			left = left.Next
+		} else {
+			cur.Next = right
+			right = right.Next
+		}
+		cur = cur.Next
+	}
+
+	if left != nil {
+		cur.Next = left
+	}
+	if right != nil {
+		cur.Next = right
+	}
+
+	return fake.Next
+}
+
+func getIntersectionNode(headA, headB *ListNode) *ListNode {
+	if headA == nil || headB == nil {
+		return nil
+	}
+
+	a, b := headA, headB
+
+	for a != b {
+		if a != nil {
+			a = a.Next
+		} else {
+			a = headB
+		}
+
+		if b != nil {
+			b = b.Next
+		} else {
+			b = headA
+		}
+	}
+
+	return a
+}
+
+func deleteNode(node *ListNode) {
+	node.Val = node.Next.Val
+	node.Next = node.Next.Next
+}
+
+func oddEvenList(head *ListNode) *ListNode {
+	if head == nil {
+		return head
+	}
+
+	old, even, i := &ListNode{}, &ListNode{}, 1
+
+	oldCur, evenCur := old, even
+
+	for head != nil {
+		t := head.Next
+		if i%2 == 1 {
+			oldCur.Next = head
+			oldCur = oldCur.Next
+			oldCur.Next = nil
+		} else {
+			evenCur.Next = head
+			evenCur = evenCur.Next
+			evenCur.Next = nil
+		}
+
+		head = t
+		i++
+	}
+
+	oldCur.Next = even.Next
+
+	return old.Next
+}

@@ -1,3 +1,4 @@
+struct Student(i32, i32);
 fn main() {
     let mut number: usize = 3;
 
@@ -7,5 +8,7 @@ fn main() {
         number = number - 1;
     }
 
-    println!("LIFTOFF!!!");
+    let a = Student(11, 22);
+
+    println!("{} {}", a.0, a.1);
 }
