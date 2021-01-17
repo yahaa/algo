@@ -269,21 +269,49 @@ impl Solution {
             None => -1,
         }
     }
+    // https://leetcode.com/problems/find-k-pairs-with-smallest-sums/
+    pub fn k_smallest_pairs(nums1: Vec<i32>, nums2: Vec<i32>, k: i32) -> Vec<Vec<i32>> {
+        let mut res: Vec<Vec<i32>> = Vec::new();
+        let (n, m) = (nums1.len(), nums2.len());
+
+        if n == 0 || m == 0 {
+            return res;
+        }
+
+        let mut heap = BinaryHeap::new();
+
+        for i in 0..n {
+            heap.push(Pairs::new(nums1[i] + nums2[0], Pairs::new(i, 0 as usize)));
+        }
+
+        while res.len() < k as usize && heap.len() > 0 {
+            let t = heap.pop().unwrap();
+            let i = t.last.first;
+            let j = t.last.last;
+
+            res.push(vec![nums1[i], nums2[j]]);
+
+            if j + 1 < m {
+                heap.push(Pairs::new(nums1[i] + nums2[j + 1], Pairs::new(i, j + 1)));
+            }
+        }
+        res
+    }
 }
 
 #[derive(Copy, Clone, Eq, PartialEq, Ord, Debug)]
-struct Pairs<T: Ord> {
+struct Pairs<T: Ord, U: Ord> {
     first: T,
-    last: T,
+    last: U,
 }
 
-impl<T: Ord> Pairs<T> {
-    pub fn new(first: T, last: T) -> Self {
+impl<T: Ord, U: Ord> Pairs<T, U> {
+    pub fn new(first: T, last: U) -> Self {
         Pairs { first, last }
     }
 }
 
-impl<T: Ord> PartialOrd for Pairs<T> {
+impl<T: Ord, U: Ord> PartialOrd for Pairs<T, U> {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         if self.first == other.first {
             return other.last.partial_cmp(&self.last);
