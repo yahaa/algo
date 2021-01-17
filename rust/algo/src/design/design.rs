@@ -1,3 +1,7 @@
+#![allow(dead_code)]
+
+use std::collections::{HashMap, HashSet, LinkedList};
+
 struct SubrectangleQueries {
     rectangle: Vec<Vec<i32>>,
 }
@@ -21,6 +25,55 @@ impl SubrectangleQueries {
     }
     fn get_value(&self, row: i32, col: i32) -> i32 {
         self.rectangle[row as usize][col as usize]
+    }
+}
+
+struct Twitter {
+    tweets: LinkedList<(i32, i32)>, // user_id,tweet_id
+    relations: HashMap<i32, HashSet<i32>>,
+}
+
+impl Twitter {
+    fn new() -> Self {
+        Twitter {
+            tweets: LinkedList::new(),
+            relations: HashMap::new(),
+        }
+    }
+
+    fn post_tweet(&mut self, user_id: i32, tweet_id: i32) {
+        self.tweets.push_front((user_id, tweet_id));
+    }
+
+    fn get_news_feed(&self, user_id: i32) -> Vec<i32> {
+        self.tweets
+            .iter()
+            .filter(|item| {
+                if item.0 == user_id {
+                    return true;
+                }
+                match self.relations.get(&user_id) {
+                    Some(set) => return set.contains(&item.0),
+                    None => return false,
+                }
+            })
+            .take(10)
+            .map(|item| item.1)
+            .collect()
+    }
+
+    fn follow(&mut self, follower_id: i32, followee_id: i32) {
+        self.relations
+            .entry(follower_id)
+            .or_insert(HashSet::new())
+            .insert(followee_id);
+    }
+
+    fn unfollow(&mut self, follower_id: i32, followee_id: i32) {
+        self.relations
+            .entry(follower_id)
+            .or_insert(HashSet::new())
+            .remove(&followee_id);
     }
 }
 
