@@ -290,12 +290,60 @@ impl Solution {
             let j = t.last.last;
 
             res.push(vec![nums1[i], nums2[j]]);
-
             if j + 1 < m {
                 heap.push(Pairs::new(nums1[i] + nums2[j + 1], Pairs::new(i, j + 1)));
             }
         }
         res
+    }
+    // leetcode 1705
+    pub fn eaten_apples(apples: Vec<i32>, days: Vec<i32>) -> i32 {
+        if apples.len() != days.len() {
+            return 0;
+        }
+
+        let mut heap = BinaryHeap::new();
+
+        let (mut res, n, mut i) = (0, apples.len(), 0 as usize);
+
+        while i < n || heap.len() > 0 {
+            if i < n && apples[i] > 0 {
+                heap.push(Pairs::new(days[i] + i as i32, apples[i]));
+            }
+
+            while heap.len() > 0 && heap.peek().unwrap().first as usize <= i {
+                heap.pop();
+            }
+
+            if let Some(mut p) = heap.pop() {
+                res += 1;
+                p.last -= 1;
+                if p.last > 0 {
+                    heap.push(p)
+                }
+            }
+            i += 1;
+        }
+        res
+    }
+
+    // leetcode 1673
+    pub fn most_competitive(nums: Vec<i32>, k: i32) -> Vec<i32> {
+        let mut stack = Vec::new();
+        for i in 0..nums.len() {
+            while stack.len() > 0
+                && stack.last().unwrap() > &nums[i]
+                && k as usize - stack.len() < nums.len() - i
+            {
+                stack.pop();
+            }
+
+            if stack.len() < k as usize {
+                stack.push(nums[i]);
+            }
+        }
+
+        stack
     }
 }
 
@@ -420,5 +468,16 @@ mod test {
         assert_eq!(Some(Pairs::new(1, 3)), heap.pop());
         assert_eq!(Some(Pairs::new(2, 2)), heap.pop());
         assert_eq!(Some(Pairs::new(2, 3)), heap.pop());
+    }
+
+    #[test]
+    fn most_competitive() {
+        let nums = vec![3, 5, 2, 6];
+        let k = 2;
+        assert_eq!(vec![2, 6], Solution::most_competitive(nums, k));
+
+        let nums = vec![2, 4, 3, 3, 5, 4, 9, 6];
+        let k = 4;
+        assert_eq!(vec![2, 3, 3, 4], Solution::most_competitive(nums, k));
     }
 }
