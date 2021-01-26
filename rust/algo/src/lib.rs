@@ -3,6 +3,7 @@ mod design;
 mod heap;
 mod linkedlist;
 mod recursive;
+mod search;
 
 use std::cmp;
 use std::collections::HashMap;

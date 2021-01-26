@@ -327,7 +327,6 @@ impl Solution {
         res
     }
 
-    // leetcode 1673
     pub fn most_competitive(nums: Vec<i32>, k: i32) -> Vec<i32> {
         let mut stack = Vec::new();
         for i in 0..nums.len() {
