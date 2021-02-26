@@ -6,15 +6,9 @@ struct SubrectangleQueries {
     rectangle: Vec<Vec<i32>>,
 }
 
-/**
- * `&self` means the method takes an immutable reference.
- * If you need a mutable reference, change it to `&mut self` instead.
- */
 impl SubrectangleQueries {
     fn new(rectangle: Vec<Vec<i32>>) -> Self {
-        return SubrectangleQueries {
-            rectangle: rectangle,
-        };
+        return SubrectangleQueries { rectangle };
     }
     fn update_subrectangle(&mut self, row1: i32, col1: i32, row2: i32, col2: i32, new_value: i32) {
         for i in row1..=row2 {
@@ -105,6 +99,47 @@ impl MyCalendarTwo {
         }
 
         true
+    }
+}
+
+struct CustomStack {
+    max_size: i32,
+    stack: Vec<i32>,
+}
+
+impl CustomStack {
+    fn new(max_size: i32) -> Self {
+        return CustomStack {
+            max_size,
+            stack: Vec::new(),
+        };
+    }
+
+    fn push(&mut self, x: i32) {
+        if self.stack.len() >= self.max_size as usize {
+            return;
+        }
+
+        self.stack.push(x);
+    }
+
+    fn pop(&mut self) -> i32 {
+        match self.stack.pop() {
+            Some(v) => v,
+            None => -1,
+        }
+    }
+
+    fn increment(&mut self, k: i32, val: i32) {
+        let mut n = k as usize;
+
+        if self.stack.len() <= n {
+            n = self.stack.len();
+        }
+
+        for i in (0..n).rev() {
+            self.stack[i] += val;
+        }
     }
 }
 
