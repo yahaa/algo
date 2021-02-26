@@ -300,6 +300,28 @@ impl Solution {
     fn is_bad_version(&self, num: i32) -> bool {
         return false;
     }
+
+    // leetcode 220
+    pub fn contains_nearby_almost_duplicate(nums: Vec<i32>, k: i32, t: i32) -> bool {
+        fn abs(a: i64) -> i64 {
+            if a > 0 {
+                return a;
+            }
+
+            -a
+        }
+        let t = t as i64;
+
+        for i in 0..nums.len() {
+            for j in 1..=k as usize {
+                if i + j < nums.len() && abs(nums[i] as i64 - nums[i + j] as i64) <= t {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }
 
 #[cfg(test)]

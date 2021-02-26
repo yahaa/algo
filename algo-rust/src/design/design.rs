@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-use std::collections::{HashMap, HashSet, LinkedList};
+use std::collections::{BTreeMap, HashMap, HashSet, LinkedList};
 
 struct SubrectangleQueries {
     rectangle: Vec<Vec<i32>>,
@@ -74,6 +74,37 @@ impl Twitter {
             .entry(follower_id)
             .or_insert(HashSet::new())
             .remove(&followee_id);
+    }
+}
+
+struct MyCalendarTwo {
+    delta: BTreeMap<i32, i32>,
+}
+
+impl MyCalendarTwo {
+    fn new() -> Self {
+        MyCalendarTwo {
+            delta: BTreeMap::new(),
+        }
+    }
+
+    fn book(&mut self, start: i32, end: i32) -> bool {
+        *self.delta.entry(start).or_insert(0) += 1;
+        *self.delta.entry(end).or_insert(0) += -1;
+
+        let mut sum = 0;
+
+        for v in self.delta.values() {
+            sum += *v;
+            if sum >= 3 {
+                *self.delta.entry(start).or_insert(0) -= 1;
+                *self.delta.entry(end).or_insert(0) += 1;
+
+                return false;
+            }
+        }
+
+        true
     }
 }
 

@@ -292,4 +292,23 @@ impl Solution {
             Some(v) => *v,
         }
     }
+
+    // leetcode 404
+    pub fn sum_of_left_leaves(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+        let mut sum = 0;
+        fn dfs(root: Option<Rc<RefCell<TreeNode>>>, sum: &mut i32, is_left: bool) {
+            if let Some(r) = root {
+                if is_left && r.borrow().left.is_none() && r.borrow().right.is_none() {
+                    *sum += r.borrow().val;
+                }
+
+                dfs(r.borrow().left.clone(), sum, true);
+                dfs(r.borrow().right.clone(), sum, false);
+            }
+        }
+
+        dfs(root, &mut sum, false);
+
+        sum
+    }
 }

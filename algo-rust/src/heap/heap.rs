@@ -1,5 +1,7 @@
 #![allow(dead_code)]
+#![feature(map_first_last)]
 
+use std::collections::BTreeMap;
 use std::collections::{BinaryHeap, HashMap};
 use std::{
     cmp::{min, Ord, Ordering, Reverse},
@@ -343,6 +345,34 @@ impl Solution {
         }
 
         stack
+    }
+
+    // leetcode 846
+    pub fn is_n_straight_hand(hand: Vec<i32>, w: i32) -> bool {
+        let mut map = BTreeMap::new();
+
+        for n in hand {
+            *map.entry(n).or_insert(0) += 1;
+        }
+
+        let keys: Vec<i32> = map.keys().cloned().collect();
+
+        for k in keys {
+            if let Some(v) = map.get(&k) {
+                if *v > 0 {
+                    for i in (0..w).rev() {
+                        if let Some(mut x) = map.get_mut(&(k + i)).or(Some(&mut 0)) {
+                            if *x < *v {
+                                return false;
+                            }
+                            *x -= v;
+                        }
+                    }
+                }
+            }
+        }
+
+        true
     }
 }
 
