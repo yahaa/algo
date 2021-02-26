@@ -297,7 +297,7 @@ impl Solution {
     }
 
     // isBadVersion for leetcode 278
-    fn is_bad_version(&self, num: i32) -> bool {
+    fn is_bad_version(&self, _num: i32) -> bool {
         return false;
     }
 

@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 pub struct Solution {}
 
 impl Solution {
@@ -56,7 +57,7 @@ impl Solution {
         return false;
     }
 
-    pub fn hammingWeight(n: u32) -> i32 {
+    pub fn hamming_weight(n: u32) -> i32 {
         let (mut n, mut count) = (n, 0);
         while n > 0 {
             count += 1;

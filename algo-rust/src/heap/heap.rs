@@ -1,5 +1,4 @@
 #![allow(dead_code)]
-#![feature(map_first_last)]
 
 use std::collections::BTreeMap;
 use std::collections::{BinaryHeap, HashMap};
@@ -358,11 +357,11 @@ impl Solution {
         let keys: Vec<i32> = map.keys().cloned().collect();
 
         for k in keys {
-            if let Some(v) = map.get(&k) {
-                if *v > 0 {
+            if let Some(&v) = map.get(&k) {
+                if v > 0 {
                     for i in (0..w).rev() {
-                        if let Some(mut x) = map.get_mut(&(k + i)).or(Some(&mut 0)) {
-                            if *x < *v {
+                        if let Some(x) = map.get_mut(&(k + i)).or(Some(&mut 0)) {
+                            if *x < v {
                                 return false;
                             }
                             *x -= v;

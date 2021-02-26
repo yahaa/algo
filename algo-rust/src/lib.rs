@@ -1,3 +1,5 @@
+#![feature(map_first_last)]
+
 mod bit;
 mod design;
 mod heap;
@@ -324,7 +326,6 @@ impl Solution {
     pub fn find_duplicates(mut nums: Vec<i32>) -> Vec<i32> {
         let mut res: Vec<i32> = Vec::new();
         for i in 0..nums.len() {
-        for i in 0..nums.len() {
             let index = nums[i].abs() - 1;
             if nums[index as usize] < 0 {
                 res.push(index + 1);
@@ -476,7 +477,7 @@ impl Solution {
             *mpt.entry(c).or_insert(0) += 1;
         }
 
-        let (mut i, mut j, mut found) = (0, s.len() - 1, false);
+        let (mut i, j, found) = (0, s.len() - 1, false);
 
         while i < j && !found {
             let c = s.chars().nth(i).unwrap();
@@ -697,7 +698,5 @@ mod test {
     }
 
     #[test]
-    fn dominant_index() {
-        let nums = vec![3, 6, 1, 0];
-        let want = 1;
+    fn dominant_index() {}
 }

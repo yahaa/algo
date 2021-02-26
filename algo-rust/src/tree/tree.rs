@@ -121,8 +121,8 @@ impl Solution {
         post_order(root.clone(), &mut list);
 
         for i in 1..list.len() {
-            let mut pre = list[i - 1].clone();
-            let mut cur = list[i].clone();
+            let pre = list[i - 1].clone();
+            let cur = list[i].clone();
 
             pre.borrow_mut().left.take();
 
@@ -154,8 +154,8 @@ impl Solution {
 
         fn dfs(root: Option<Rc<RefCell<TreeNode>>>, sum: &mut i32) -> i32 {
             if let Some(r) = root {
-                let mut left = max(dfs(r.borrow().left.clone(), sum), 0);
-                let mut right = max(dfs(r.borrow().right.clone(), sum), 0);
+                let left = max(dfs(r.borrow().left.clone(), sum), 0);
+                let right = max(dfs(r.borrow().right.clone(), sum), 0);
 
                 *sum = max(*sum, r.borrow().val + left + right);
 
@@ -230,8 +230,8 @@ impl Solution {
     pub fn invert_tree(root: Option<Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeNode>>> {
         fn dfs(root: Option<Rc<RefCell<TreeNode>>>) {
             if let Some(r) = root {
-                let mut left = r.borrow_mut().left.take();
-                let mut right = r.borrow_mut().right.take();
+                let left = r.borrow_mut().left.take();
+                let right = r.borrow_mut().right.take();
 
                 dfs(left.clone());
                 dfs(right.clone());
