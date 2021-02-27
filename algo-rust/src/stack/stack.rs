@@ -65,11 +65,95 @@ impl Solution {
 
         res
     }
+
+    // leetcode 739
+    pub fn daily_temperatures(t: Vec<i32>) -> Vec<i32> {
+        let (mut stack, mut res) = (Vec::new(), vec![0; t.len()]);
+
+        stack.push((t.len(), i32::MAX));
+
+        for i in (0..t.len()).rev() {
+            let mut tmp = 0;
+
+            while t[i] >= stack.last().unwrap().1 {
+                let top = stack.pop().unwrap();
+
+                tmp += res[top.0];
+            }
+
+            if stack.last().unwrap().1 < i32::MAX {
+                tmp += 1;
+                res[i] = tmp;
+            }
+
+            stack.push((i, t[i]));
+        }
+
+        res
+    }
+
+    // leetcode 946
+    pub fn validate_stack_sequences(pushed: Vec<i32>, popped: Vec<i32>) -> bool {
+        let mut stack = Vec::new();
+        let mut index = 0;
+
+        for i in 0..pushed.len() {
+            stack.push(pushed[i]);
+            while !stack.is_empty() && *stack.last().unwrap() == popped[index] {
+                index += 1;
+                stack.pop();
+            }
+        }
+
+        index == popped.len()
+    }
+
+    // leetcode 1249
+    pub fn min_remove_to_make_valid(s: String) -> String {
+        let mut stack = Vec::new();
+        let mut chars: Vec<char> = s.chars().collect();
+
+        for i in 0..chars.len() {
+            if chars[i] == '(' {
+                stack.push(i);
+            } else if chars[i] == ')' {
+                if !stack.is_empty() && chars[*stack.last().unwrap()] == '(' {
+                    stack.pop();
+                } else {
+                    stack.push(i);
+                }
+            }
+        }
+
+        while let Some(i) = stack.pop() {
+            chars.remove(i);
+        }
+
+        chars.iter().collect()
+    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
+
+    #[test]
+    fn min_remove_to_make_valid() {
+        assert_eq!(
+            "lee(t(c)o)de",
+            Solution::min_remove_to_make_valid("lee(t(c)o)de)".to_string())
+        )
+    }
+    #[test]
+    fn validate_stack_sequences() {
+        let pushed = vec![1, 2, 3, 4, 5];
+        let poped = vec![4, 5, 3, 2, 1];
+        assert_eq!(true, Solution::validate_stack_sequences(pushed, poped));
+
+        let pushed = vec![1, 2, 3, 4, 5];
+        let poped = vec![4, 3, 5, 1, 2];
+        assert_eq!(false, Solution::validate_stack_sequences(pushed, poped));
+    }
 
     #[test]
     fn mmin_add_to_make_valid() {
@@ -89,5 +173,17 @@ mod test {
         assert_eq!(2, Solution::score_of_parentheses("(())".to_string()));
         assert_eq!(4, Solution::score_of_parentheses("((()))".to_string()));
         assert_eq!(5, Solution::score_of_parentheses("((()))()".to_string()));
+    }
+
+    #[test]
+    fn daily_temperatures() {
+        let t = vec![73, 74, 75, 71, 69, 72, 76, 73];
+        let res = vec![1, 1, 4, 2, 1, 1, 0, 0];
+
+        assert_eq!(res, Solution::daily_temperatures(t));
+
+        let t = vec![55, 38, 53, 81, 61, 93, 97, 32, 43, 78];
+        let res = vec![3, 1, 1, 2, 1, 1, 0, 1, 1, 0];
+        assert_eq!(res, Solution::daily_temperatures(t));
     }
 }
