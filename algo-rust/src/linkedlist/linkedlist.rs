@@ -293,14 +293,63 @@ impl Solution {
 
         Solution::merge_two_lists(left, right)
     }
+
+    // leetcode 1019
+    pub fn next_larger_nodes(head: Option<Box<ListNode>>) -> Vec<i32> {
+        let mut head = head;
+        let mut stack: Vec<(i32, usize)> = Vec::new();
+        let (mut res, mut i) = (Vec::new(), 0);
+
+        while let Some(h) = head {
+            res.push(0);
+
+            while !stack.is_empty() && stack.last().unwrap().0 < h.val {
+                res[stack.pop().unwrap().1] = h.val;
+            }
+
+            stack.push((h.val, i));
+            i += 1;
+
+            head = h.next;
+        }
+
+        res
+    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
+    #[test]
+    fn next_larger_nodes() {
+        let head = Some(Box::new(ListNode {
+            val: 2,
+            next: Some(Box::new(ListNode {
+                val: 1,
+                next: Some(Box::new(ListNode { val: 5, next: None })),
+            })),
+        }));
+
+        assert_eq!(vec![5, 5, 0], Solution::next_larger_nodes(head));
+
+        let head = Some(Box::new(ListNode {
+            val: 2,
+            next: Some(Box::new(ListNode {
+                val: 7,
+                next: Some(Box::new(ListNode {
+                    val: 4,
+                    next: Some(Box::new(ListNode {
+                        val: 3,
+                        next: Some(Box::new(ListNode { val: 5, next: None })),
+                    })),
+                })),
+            })),
+        }));
+
+        assert_eq!(vec![7, 0, 5, 5, 0], Solution::next_larger_nodes(head));
+    }
 
     #[test]
-
     fn delete_duplicates2() {
         let head = Some(Box::new(ListNode {
             val: 1,
