@@ -143,6 +143,32 @@ impl CustomStack {
     }
 }
 
+// leetcode 901
+struct StockSpanner {
+    history: Vec<(i32, i32)>,
+}
+
+impl StockSpanner {
+    fn new() -> Self {
+        let mut history = Vec::new();
+        history.push((i32::MAX, 0));
+
+        StockSpanner { history }
+    }
+
+    fn next(&mut self, price: i32) -> i32 {
+        let mut tmp = 1;
+
+        while !self.history.is_empty() && self.history.last().unwrap().0 <= price {
+            tmp += self.history.pop().unwrap().1;
+        }
+
+        self.history.push((price, tmp));
+
+        tmp
+    }
+}
+
 #[cfg(test)]
 mod test {
     use super::*;

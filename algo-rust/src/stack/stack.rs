@@ -131,11 +131,68 @@ impl Solution {
 
         chars.iter().collect()
     }
+
+    // leetcode 1190
+    pub fn reverse_parentheses(s: String) -> String {
+        let mut chars: Vec<char> = s.chars().collect();
+        let mut stack = Vec::new();
+
+        for i in 0..chars.len() {
+            if chars[i] == '(' {
+                stack.push(i);
+            } else if chars[i] == ')' {
+                if let Some(s) = stack.pop() {
+                    (&mut chars[s + 1..i]).reverse();
+                }
+            }
+        }
+
+        chars.iter().filter(|x| **x != '(' && **x != ')').collect()
+    }
+
+    // leetcode 503
+    pub fn next_greater_elements(nums: Vec<i32>) -> Vec<i32> {
+        let mut res = vec![-1; nums.len()];
+        let mut stack: Vec<usize> = Vec::new();
+
+        for i in 0..2 * nums.len() {
+            while !stack.is_empty() && nums[*stack.last().unwrap()] < nums[i % nums.len()] {
+                let index = stack.pop().unwrap();
+                res[index] = nums[i % nums.len()];
+            }
+
+            stack.push(i % nums.len());
+        }
+
+        res
+    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
+
+    #[test]
+    fn next_greater_elements() {
+        let nums = vec![1, 2, 1];
+        assert_eq!(vec![2, -1, 2], Solution::next_greater_elements(nums));
+    }
+    #[test]
+    fn reverse_parentheses() {
+        assert_eq!("dcba", Solution::reverse_parentheses("(abcd)".to_string()));
+        assert_eq!(
+            "iloveu",
+            Solution::reverse_parentheses("(u(love)i)".to_string())
+        );
+        assert_eq!(
+            "leetcode",
+            Solution::reverse_parentheses("(ed(et(oc))el)".to_string())
+        );
+        assert_eq!(
+            "apmnolkjihgfedcbq",
+            Solution::reverse_parentheses("a(bcdefghijkl(mno)p)q".to_string())
+        );
+    }
 
     #[test]
     fn min_remove_to_make_valid() {
