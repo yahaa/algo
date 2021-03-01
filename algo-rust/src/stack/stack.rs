@@ -192,11 +192,39 @@ impl Solution {
 
         stack.iter().map(|item| item.0).collect()
     }
+
+    // leetcode 1047
+    pub fn remove_duplicates_1(s: String) -> String {
+        let mut stack: Vec<char> = Vec::new();
+
+        for c in s.chars() {
+            if stack.is_empty() {
+                stack.push(c);
+                continue;
+            }
+
+            if stack.last().unwrap() == &c {
+                stack.pop();
+                continue;
+            }
+
+            stack.push(c);
+        }
+
+        stack.iter().map(|item| item).collect()
+    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
+
+    #[test]
+    fn remove_duplicates_1() {
+        assert_eq!("ca", Solution::remove_duplicates_1("abbaca".to_string()));
+        assert_eq!("a", Solution::remove_duplicates_1("aaa".to_string()));
+        assert_eq!("", Solution::remove_duplicates_1("aaaa".to_string()));
+    }
 
     #[test]
     fn remove_duplicates() {
