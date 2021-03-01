@@ -166,11 +166,51 @@ impl Solution {
 
         res
     }
+
+    // leetcode 1209
+    pub fn remove_duplicates(s: String, k: i32) -> String {
+        let mut stack: Vec<(char, i32)> = Vec::new();
+        let chars: Vec<char> = s.chars().collect();
+
+        for i in 0..chars.len() {
+            let mut count = 1;
+
+            if !stack.is_empty() && stack.last().unwrap().0 == chars[i] {
+                count += stack.last().unwrap().1;
+            }
+
+            stack.push((chars[i], count));
+
+            while !stack.is_empty() && stack.last().unwrap().1 == k {
+                let mut t = k;
+                while t > 0 && !stack.is_empty() {
+                    stack.pop();
+                    t -= 1;
+                }
+            }
+        }
+
+        stack.iter().map(|item| item.0).collect()
+    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
+
+    #[test]
+    fn remove_duplicates() {
+        assert_eq!("abcd", Solution::remove_duplicates("abcd".to_string(), 2));
+        assert_eq!(
+            "aa",
+            Solution::remove_duplicates("deeedbbcccbdaa".to_string(), 3)
+        );
+
+        assert_eq!(
+            "ps",
+            Solution::remove_duplicates("pbbcggttciiippooaais".to_string(), 2)
+        );
+    }
 
     #[test]
     fn next_greater_elements() {
