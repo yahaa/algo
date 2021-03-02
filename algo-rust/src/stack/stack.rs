@@ -213,11 +213,26 @@ impl Solution {
 
         stack.iter().map(|item| item).collect()
     }
+
+    // leetcode 1003
+    pub fn is_valid(s: String) -> bool {
+        let mut s = s;
+        while s.contains("abc") {
+            s = s.replace("abc", "");
+        }
+
+        s.len() == 0
+    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
+
+    #[test]
+    fn is_valid() {
+        assert_eq!(true, Solution::is_valid("aabcbc".to_string()));
+    }
 
     #[test]
     fn remove_duplicates_1() {
