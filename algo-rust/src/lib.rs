@@ -7,6 +7,7 @@ mod linkedlist;
 mod recursive;
 mod search;
 mod stack;
+mod strings;
 mod tree;
 
 use std::cmp;
