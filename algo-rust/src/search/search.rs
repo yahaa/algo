@@ -322,11 +322,69 @@ impl Solution {
 
         return false;
     }
+
+    // leetcode 130
+    pub fn solve(board: &mut Vec<Vec<char>>) {
+        fn dfs(board: &mut Vec<Vec<char>>, x: usize, y: usize, n: usize, m: usize) {
+            if x >= n || x < 0 as usize || y >= m || y < 0 as usize || board[x][y] != 'O' {
+                return;
+            }
+
+            board[x][y] = 'A';
+            dfs(board, x, y + 1, n, m);
+            dfs(board, x, y - 1, n, m);
+            dfs(board, x + 1, y, n, m);
+            dfs(board, x - 1, y, n, m);
+        }
+
+        let (n, m) = (board.len(), board[0].len());
+
+        for i in 0..n {
+            dfs(board, i, 0, n, m);
+            dfs(board, i, m - 1, n, m);
+        }
+
+        for j in 0..m {
+            dfs(board, 0, j, n, m);
+            dfs(board, n - 1, j, n, m);
+        }
+
+        for i in 0..n {
+            for j in 0..m {
+                if board[i][j] == 'A' {
+                    board[i][j] = 'O';
+                } else if board[i][j] == 'O' {
+                    board[i][j] = 'X';
+                }
+            }
+        }
+    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
+
+    #[test]
+    fn solve() {
+        let mut board = vec![
+            vec!['X', 'X', 'X', 'X'],
+            vec!['X', 'O', 'O', 'X'],
+            vec!['X', 'X', 'O', 'X'],
+            vec!['X', 'O', 'X', 'X'],
+        ];
+
+        let want = vec![
+            vec!['X', 'X', 'X', 'X'],
+            vec!['X', 'X', 'X', 'X'],
+            vec!['X', 'X', 'X', 'X'],
+            vec!['X', 'O', 'X', 'X'],
+        ];
+
+        Solution::solve(&mut board);
+
+        assert_eq!(want, board);
+    }
 
     #[test]
     fn my_sqrt() {
