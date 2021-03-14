@@ -359,11 +359,66 @@ impl Solution {
             }
         }
     }
+    // leetcode 200
+    pub fn num_islands(grid: Vec<Vec<char>>) -> i32 {
+        fn dfs(
+            grid: &Vec<Vec<char>>,
+            visited: &mut Vec<Vec<bool>>,
+            x: i32,
+            y: i32,
+            n: i32,
+            m: i32,
+        ) {
+            if x < 0
+                || x >= n
+                || y < 0
+                || y >= m
+                || visited[x as usize][y as usize]
+                || grid[x as usize][y as usize] == '0'
+            {
+                return;
+            }
+
+            visited[x as usize][y as usize] = true;
+
+            dfs(grid, visited, x, y + 1, n, m);
+            dfs(grid, visited, x, y - 1, n, m);
+            dfs(grid, visited, x + 1, y, n, m);
+            dfs(grid, visited, x - 1, y, n, m);
+        }
+
+        let (n, m) = (grid.len(), grid[0].len());
+
+        let (mut visited, mut count) = (vec![vec![false; m]; n], 0);
+
+        for i in 0..n {
+            for j in 0..m {
+                if grid[i][j] == '1' && !visited[i][j] {
+                    count += 1;
+                    dfs(&grid, &mut visited, i as i32, j as i32, n as i32, m as i32);
+                }
+            }
+        }
+
+        count
+    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
+
+    #[test]
+    fn num_islands() {
+        let grid = vec![
+            vec!['1', '1', '1', '1', '0'],
+            vec!['1', '1', '0', '1', '0'],
+            vec!['1', '1', '0', '0', '0'],
+            vec!['0', '0', '0', '0', '0'],
+        ];
+
+        assert_eq!(1, Solution::num_islands(grid));
+    }
 
     #[test]
     fn solve() {
