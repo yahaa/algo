@@ -21,6 +21,7 @@ impl TreeNode {
 
 use std::cell::RefCell;
 use std::cmp::max;
+use std::collections::HashMap;
 use std::rc::Rc;
 
 struct Solution {}
@@ -310,5 +311,37 @@ impl Solution {
         dfs(root, &mut sum, false);
 
         sum
+    }
+
+    // leetcode 501
+    pub fn find_mode(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
+        //        let mut map: HashMap<i32, Vec<i32>> = HashMap::new();
+        //        let mut max_count = 0;
+        //
+        //        fn dfs(
+        //            root: Option<Rc<RefCell<TreeNode>>>,
+        //            pre: Option<&mut i32>,
+        //            max_count: &mut i32,
+        //            map: &mut HashMap<i32, Vec<i32>>,
+        //        ) {
+        //            match root {
+        //                Some(r) => {
+        //                    dfs(r.borrow().left.clone(), pre, max_count, map);
+        //
+        //                    if let Some(prev) = pre {
+        //                    } else {
+        //                        let mut val = r.borrow().val;
+        //
+        //                        pre = Some(prev.borrow().val);
+        //                    }
+        //                    dfs(r.borrow().right.clone(), pre, max_count, map);
+        //                }
+        //                None => {
+        //                    return;
+        //                }
+        //            }
+        //        }
+        //
+        unimplemented!()
     }
 }

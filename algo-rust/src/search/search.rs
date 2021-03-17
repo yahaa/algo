@@ -402,6 +402,44 @@ impl Solution {
 
         count
     }
+    // leetcode 131
+    pub fn partition(s: String) -> Vec<Vec<String>> {
+        fn dfs(
+            chars: &Vec<char>,
+            index: usize,
+            len: usize,
+            path: Vec<String>,
+            result: &mut Vec<Vec<String>>,
+        ) {
+            if index == len {
+                result.push(path.clone());
+                return;
+            }
+
+            for i in index..len {
+                if !Solution::is_palindrome(&chars, index, i) {
+                    continue;
+                }
+                // todo
+            }
+        }
+        unimplemented!()
+    }
+
+    // leetcode 131 help
+    fn is_palindrome(chars: &Vec<char>, left: usize, right: usize) -> bool {
+        let (mut left, mut right) = (left, right);
+
+        while left < right {
+            if chars[left] != chars[right] {
+                return false;
+            }
+            left += 1;
+            right -= 1;
+        }
+
+        true
+    }
 }
 
 #[cfg(test)]
