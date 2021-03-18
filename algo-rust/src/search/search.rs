@@ -408,7 +408,7 @@ impl Solution {
             chars: &Vec<char>,
             index: usize,
             len: usize,
-            path: Vec<String>,
+            path: &mut Vec<String>,
             result: &mut Vec<Vec<String>>,
         ) {
             if index == len {
@@ -420,10 +420,23 @@ impl Solution {
                 if !Solution::is_palindrome(&chars, index, i) {
                     continue;
                 }
-                // todo
+                path.push(chars[index..(i + 1)].iter().collect());
+                dfs(chars, i + 1, len, path, result);
+                path.pop();
             }
         }
-        unimplemented!()
+
+        let mut result: Vec<Vec<String>> = Vec::new();
+
+        if s.len() == 0 {
+            return result;
+        }
+
+        let mut path: Vec<String> = Vec::new();
+
+        dfs(&s.chars().collect(), 0, s.len(), &mut path, &mut result);
+
+        result
     }
 
     // leetcode 131 help
@@ -446,6 +459,14 @@ impl Solution {
 mod test {
     use super::*;
 
+    #[test]
+    fn partition() {
+        let result = vec![vec!["a", "a", "b"], vec!["aa", "b"]];
+        assert_eq!(result, Solution::partition("aab".to_string()));
+
+        let result = vec![vec!["a"]];
+        assert_eq!(result, Solution::partition("a".to_string()));
+    }
     #[test]
     fn num_islands() {
         let grid = vec![
