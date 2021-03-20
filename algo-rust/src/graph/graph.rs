@@ -35,6 +35,44 @@ impl Solution {
 
         count == num
     }
+
+    // leetcode 210
+    pub fn find_order(num: i32, prerequisites: Vec<Vec<i32>>) -> Vec<i32> {
+        let mut graph = vec![vec![]; num as usize];
+        let mut indegree = vec![0; num as usize];
+
+        for edge in prerequisites {
+            graph[edge[1] as usize].push(edge[0]);
+            indegree[edge[0] as usize] += 1;
+        }
+
+        let (mut queue, mut count, mut result) = (Vec::new(), 0, Vec::new());
+
+        for i in 0..num {
+            if indegree[i as usize] == 0 {
+                queue.push(i);
+            }
+        }
+
+        while let Some(s) = queue.pop() {
+            count += 1;
+            result.push(s);
+
+            for e in graph[s as usize].iter() {
+                indegree[*e as usize] -= 1;
+
+                if indegree[*e as usize] <= 0 {
+                    queue.push(*e);
+                }
+            }
+        }
+
+        if count == num {
+            return result;
+        }
+
+        return vec![];
+    }
 }
 #[cfg(test)]
 mod test {
