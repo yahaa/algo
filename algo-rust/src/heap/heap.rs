@@ -373,6 +373,29 @@ impl Solution {
 
         true
     }
+
+    // leetcode 630
+    pub fn schedule_course(courses: Vec<Vec<i32>>) -> i32 {
+        let mut courses = courses;
+
+        courses.sort_by(|a, b| a[1].cmp(&b[1]));
+
+        let (mut heap, mut count) = (BinaryHeap::new(), 0);
+
+        for c in courses {
+            if count + c[0] <= c[1] {
+                heap.push(c[0]);
+                count += c[0];
+            } else if !heap.is_empty() && heap.peek().unwrap() > &c[0] {
+                let h = heap.pop().unwrap();
+
+                count += c[0] - h;
+                heap.push(c[0]);
+            }
+        }
+
+        heap.len() as i32
+    }
 }
 
 #[derive(Copy, Clone, Eq, PartialEq, Ord, Debug)]
@@ -437,6 +460,18 @@ impl<T: Ord> PartialEq for KeyCount<T> {
 #[cfg(test)]
 mod test {
     use super::*;
+
+    #[test]
+    fn schedule_course() {
+        let courses = vec![
+            vec![100, 200],
+            vec![200, 1300],
+            vec![1000, 1250],
+            vec![2000, 3200],
+        ];
+
+        assert_eq!(3, Solution::schedule_course(courses))
+    }
 
     #[test]
     fn top_k_frequent() {
