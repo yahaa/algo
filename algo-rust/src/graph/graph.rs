@@ -178,6 +178,11 @@ impl Solution {
 
         res
     }
+
+    // leetcode 934 Shortest Bridge todo
+    pub fn shortest_bridge(a: Vec<Vec<i32>>) -> i32 {
+        unimplemented!()
+    }
 }
 #[cfg(test)]
 mod test {
