@@ -180,14 +180,97 @@ impl Solution {
     }
 
     // leetcode 934 Shortest Bridge todo
-    pub fn shortest_bridge(a: Vec<Vec<i32>>) -> i32 {
-        unimplemented!()
+    pub fn shortest_bridge(mut a: Vec<Vec<i32>>) -> i32 {
+        fn dfs(
+            a: &mut Vec<Vec<i32>>,
+            queue: &mut VecDeque<(i32, i32)>,
+            x: i32,
+            y: i32,
+            n: i32,
+            m: i32,
+        ) {
+            if x < 0 || x >= n || y < 0 || y >= m || a[x as usize][y as usize] != 1 {
+                return;
+            }
+
+            a[x as usize][y as usize] = 2;
+            queue.push_back((x, y));
+
+            dfs(a, queue, x + 1, y, n, m);
+            dfs(a, queue, x - 1, y, n, m);
+            dfs(a, queue, x, y + 1, n, m);
+            dfs(a, queue, x, y - 1, n, m);
+        }
+
+        let (mut res, mut queue) = (0, VecDeque::new());
+        let (n, m) = (a.len(), a[0].len());
+
+        'out: for i in 0..n {
+            for j in 0..m {
+                if a[i][j] == 1 {
+                    dfs(&mut a, &mut queue, i as i32, j as i32, n as i32, m as i32);
+                    break 'out;
+                }
+            }
+        }
+
+        let (dx, dy) = (vec![-1, 0, 1, 0], vec![0, 1, 0, -1]);
+
+        while !queue.is_empty() {
+            let mut size = queue.len();
+            while size > 0 {
+                let (x, y) = queue.pop_front().unwrap();
+
+                for k in 0..4 {
+                    let i = x + dx[k];
+                    let j = y + dy[k];
+
+                    if i < 0
+                        || i >= n as i32
+                        || j < 0
+                        || j >= m as i32
+                        || a[i as usize][j as usize] == 2
+                    {
+                        continue;
+                    }
+
+                    if a[i as usize][j as usize] == 1 {
+                        return res;
+                    }
+
+                    queue.push_back((i, j));
+                }
+
+                size -= 1;
+            }
+            res += 1;
+        }
+
+        res
     }
 }
 #[cfg(test)]
 mod test {
     use super::*;
 
+    #[test]
+    fn shortest_bridge() {
+        let a = vec![vec![0, 1], vec![1, 0]];
+        assert_eq!(1, Solution::shortest_bridge(a));
+
+        let a = vec![vec![0, 1, 0], vec![0, 0, 0], vec![0, 0, 1]];
+        assert_eq!(2, Solution::shortest_bridge(a));
+
+        let a = vec![
+            vec![1, 1, 1, 1, 1],
+            vec![1, 0, 0, 0, 1],
+            vec![1, 0, 1, 0, 1],
+            vec![1, 0, 0, 0, 1],
+            vec![1, 1, 1, 1, 1],
+        ];
+
+        assert_eq!(1, Solution::shortest_bridge(a));
+    }
     #[test]
     fn find_min_height_trees() {
         let edges = vec![vec![1, 0], vec![1, 2], vec![1, 3]];
