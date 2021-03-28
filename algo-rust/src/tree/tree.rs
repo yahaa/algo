@@ -21,7 +21,6 @@ impl TreeNode {
 
 use std::cell::RefCell;
 use std::cmp::max;
-use std::collections::HashMap;
 use std::rc::Rc;
 
 struct Solution {}
@@ -342,6 +341,15 @@ impl Solution {
         //            }
         //        }
         //
+        unimplemented!()
+    }
+
+    // 863. All Nodes Distance K in Binary Tree todo
+    pub fn distance_k(
+        root: Option<Rc<RefCell<TreeNode>>>,
+        p: Option<Rc<RefCell<TreeNode>>>,
+        K: i32,
+    ) -> Vec<i32> {
         unimplemented!()
     }
 }
