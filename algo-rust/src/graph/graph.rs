@@ -238,6 +238,8 @@ impl Solution {
                         return res;
                     }
 
+                    a[i as usize][j as usize] = 2;
+
                     queue.push_back((i, j));
                 }
 
