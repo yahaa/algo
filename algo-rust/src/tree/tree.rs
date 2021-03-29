@@ -356,4 +356,9 @@ impl Solution {
         // 3. while the bfs visit the k cycle and we got the ans
         unimplemented!()
     }
+
+    // 1339. Maximum Product of Splitted Binary Tree todo
+    pub fn max_product(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+        unimplemented!()
+    }
 }
