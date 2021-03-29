@@ -350,6 +350,10 @@ impl Solution {
         p: Option<Rc<RefCell<TreeNode>>>,
         K: i32,
     ) -> Vec<i32> {
+        // easy to solve this problem, just use twice bfs
+        // 1. visit the binary tree use bfs, to build a graph
+        // 2. use bfs to visit the graph that we got in the step 1
+        // 3. while the bfs visit the k cycle and we got the ans
         unimplemented!()
     }
 }
