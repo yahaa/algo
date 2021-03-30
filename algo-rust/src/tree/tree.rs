@@ -21,6 +21,7 @@ impl TreeNode {
 
 use std::cell::RefCell;
 use std::cmp::max;
+use std::collections::HashMap;
 use std::rc::Rc;
 
 struct Solution {}
@@ -354,6 +355,20 @@ impl Solution {
         // 1. visit the binary tree use bfs, to build a graph
         // 2. use bfs to visit the graph that we got in the step 1
         // 3. while the bfs visit the k cycle and we got the ans
+
+        fn find_parent(
+            cur: Option<Rc<RefCell<TreeNode>>>,
+            p: Option<Rc<RefCell<TreeNode>>>,
+            map: &mut HashMap<i32, Option<Rc<RefCell<TreeNode>>>>,
+        ) {
+            if let Some(r) = cur {
+                map.insert(r.borrow().val, p);
+
+                find_parent(r.borrow().left.clone(), Some(r.clone()), map);
+                find_parent(r.borrow().right.clone(), Some(r.clone()), map);
+            }
+        }
+
         unimplemented!()
     }
 
