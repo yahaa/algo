@@ -376,4 +376,13 @@ impl Solution {
     pub fn max_product(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
         unimplemented!()
     }
+
+    // 399. Evaluate Division todo
+    pub fn calc_equation(
+        equations: Vec<Vec<String>>,
+        values: Vec<f64>,
+        queries: Vec<Vec<String>>,
+    ) -> Vec<f64> {
+        unimplemented!()
+    }
 }
