@@ -22,6 +22,7 @@ impl TreeNode {
 use std::cell::RefCell;
 use std::cmp::max;
 use std::collections::HashMap;
+use std::collections::HashSet;
 use std::rc::Rc;
 
 struct Solution {}
@@ -345,31 +346,65 @@ impl Solution {
         unimplemented!()
     }
 
-    // 863. All Nodes Distance K in Binary Tree todo
+    // 863. All Nodes Distance K in Binary Tree
     pub fn distance_k(
         root: Option<Rc<RefCell<TreeNode>>>,
         p: Option<Rc<RefCell<TreeNode>>>,
-        K: i32,
+        k: i32,
     ) -> Vec<i32> {
-        // easy to solve this problem, just use twice bfs
-        // 1. visit the binary tree use bfs, to build a graph
-        // 2. use bfs to visit the graph that we got in the step 1
-        // 3. while the bfs visit the k cycle and we got the ans
-
         fn find_parent(
-            cur: Option<Rc<RefCell<TreeNode>>>,
-            p: Option<Rc<RefCell<TreeNode>>>,
-            map: &mut HashMap<i32, Option<Rc<RefCell<TreeNode>>>>,
+            root: Option<Rc<RefCell<TreeNode>>>,
+            parent: &mut HashMap<i32, Rc<RefCell<TreeNode>>>,
         ) {
-            if let Some(r) = cur {
-                map.insert(r.borrow().val, p);
+            if let Some(r) = root {
+                if r.borrow().left.is_some() {
+                    parent.insert(r.borrow().left.clone().unwrap().borrow().val, r.clone());
+                }
 
-                find_parent(r.borrow().left.clone(), Some(r.clone()), map);
-                find_parent(r.borrow().right.clone(), Some(r.clone()), map);
+                if r.borrow().right.is_some() {
+                    parent.insert(r.borrow().right.clone().unwrap().borrow().val, r.clone());
+                }
+
+                find_parent(r.borrow().left.clone(), parent);
+                find_parent(r.borrow().right.clone(), parent);
             }
         }
 
-        unimplemented!()
+        fn dfs(
+            root: Option<Rc<RefCell<TreeNode>>>,
+            k: i32,
+            parent: &mut HashMap<i32, Rc<RefCell<TreeNode>>>,
+            visited: &mut HashSet<i32>,
+            res: &mut Vec<i32>,
+        ) {
+            if let Some(r) = root {
+                if visited.contains(&r.borrow().val) {
+                    return;
+                }
+
+                visited.insert(r.borrow().val);
+
+                if k == 0 {
+                    res.push(r.borrow().val);
+                }
+
+                dfs(r.borrow().left.clone(), k - 1, parent, visited, res);
+                dfs(r.borrow().right.clone(), k - 1, parent, visited, res);
+
+                if let Some(p) = parent.get(&r.borrow().val) {
+                    dfs(Some(p.clone()), k - 1, parent, visited, res);
+                }
+            }
+        }
+
+        let mut res = Vec::new();
+        let mut parent = HashMap::new();
+        let mut visited = HashSet::new();
+
+        find_parent(root, &mut parent);
+        dfs(p, k, &mut parent, &mut visited, &mut res);
+
+        res
     }
 
     // 1339. Maximum Product of Splitted Binary Tree todo
