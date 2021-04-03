@@ -409,7 +409,38 @@ impl Solution {
 
     // 1339. Maximum Product of Splitted Binary Tree todo
     pub fn max_product(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
-        unimplemented!()
+        fn build_sum(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+            match root {
+                Some(r) => {
+                    build_sum(r.borrow().left.clone())
+                        + build_sum(r.borrow().right.clone())
+                        + r.borrow().val
+                }
+                None => 0,
+            }
+        }
+
+        fn find_max(root: Option<Rc<RefCell<TreeNode>>>, sum: &i64, max: &mut i64) -> i64 {
+            match root {
+                Some(r) => {
+                    let left = find_max(r.borrow().left.clone(), sum, max);
+                    let right = find_max(r.borrow().right.clone(), sum, max);
+
+                    *max = std::cmp::max(*max, (sum - left) * left);
+                    *max = std::cmp::max(*max, (sum - right) * right);
+
+                    left + right + r.borrow().val as i64
+                }
+                None => 0 as i64,
+            }
+        }
+
+        let sum = build_sum(root.clone()) as i64;
+        let mut max = 0 as i64;
+
+        find_max(root, &sum, &mut max);
+
+        (max % 1000000007) as i32
     }
 
     // 399. Evaluate Division todo
