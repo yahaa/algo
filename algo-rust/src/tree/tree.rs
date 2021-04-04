@@ -23,6 +23,7 @@ use std::cell::RefCell;
 use std::cmp::max;
 use std::collections::HashMap;
 use std::collections::HashSet;
+use std::collections::VecDeque;
 use std::rc::Rc;
 
 struct Solution {}
@@ -450,5 +451,47 @@ impl Solution {
         queries: Vec<Vec<String>>,
     ) -> Vec<f64> {
         unimplemented!()
+    }
+
+    // 1161. Maximum Level Sum of a Binary Tree
+    pub fn max_level_sum(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+        if root.is_none() {
+            return 0;
+        }
+
+        let mut queue = VecDeque::new();
+        let (mut max_sum, mut max_level, mut level) = (root.clone().unwrap().borrow().val, 1, 1);
+
+        queue.push_back(root);
+
+        while !queue.is_empty() {
+            let mut level_size = queue.len();
+            let mut level_sum = 0;
+
+            while level_size > 0 {
+                let r = queue.pop_front().unwrap().unwrap();
+
+                level_sum += r.borrow().val;
+
+                if r.borrow().left.is_some() {
+                    queue.push_back(r.borrow().left.clone());
+                }
+
+                if r.borrow().right.is_some() {
+                    queue.push_back(r.borrow().right.clone());
+                }
+
+                level_size -= 1;
+            }
+
+            if level_sum > max_sum {
+                max_sum = level_sum;
+                max_level = level;
+            }
+
+            level += 1;
+        }
+
+        max_level
     }
 }
