@@ -494,4 +494,9 @@ impl Solution {
 
         max_level
     }
+
+    // 988. Smallest String Starting From Leaf todo
+    pub fn smallest_from_leaf(root: Option<Rc<RefCell<TreeNode>>>) -> String {
+        unimplemented!()
+    }
 }
