@@ -495,8 +495,28 @@ impl Solution {
         max_level
     }
 
-    // 988. Smallest String Starting From Leaf todo
+    // 988. Smallest String Starting From Leaf
     pub fn smallest_from_leaf(root: Option<Rc<RefCell<TreeNode>>>) -> String {
-        unimplemented!()
+        fn dfs(root: Option<Rc<RefCell<TreeNode>>>, cur: String, ans: &mut String) {
+            if let Some(r) = root {
+                let c = std::char::from_u32(r.borrow().val as u32 + 97)
+                    .unwrap()
+                    .to_string();
+
+                let cur = c + &cur;
+
+                if r.borrow().left.is_none() && r.borrow().right.is_none() {
+                    *ans = std::cmp::min(ans.clone(), cur.clone());
+                }
+
+                dfs(r.borrow().left.clone(), cur.clone(), ans);
+                dfs(r.borrow().right.clone(), cur.clone(), ans);
+            }
+        }
+
+        let mut ans = String::from("~");
+        dfs(root, "".to_string(), &mut ans);
+
+        ans
     }
 }
