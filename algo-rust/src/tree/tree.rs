@@ -519,4 +519,12 @@ impl Solution {
 
         ans
     }
+
+    // 701. Insert into a Binary Search Tree todo
+    pub fn insert_into_bst(
+        root: Option<Rc<RefCell<TreeNode>>>,
+        val: i32,
+    ) -> Option<Rc<RefCell<TreeNode>>> {
+        unimplemented!()
+    }
 }
