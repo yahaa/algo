@@ -24,6 +24,7 @@ use std::cmp::max;
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::collections::VecDeque;
+
 use std::rc::Rc;
 
 struct Solution {}
@@ -516,6 +517,40 @@ impl Solution {
         root: Option<Rc<RefCell<TreeNode>>>,
         val: i32,
     ) -> Option<Rc<RefCell<TreeNode>>> {
+        unimplemented!()
+    }
+
+    // 617. Merge Two Binary Trees todo
+    pub fn merge_trees(
+        root1: Option<Rc<RefCell<TreeNode>>>,
+        root2: Option<Rc<RefCell<TreeNode>>>,
+    ) -> Option<Rc<RefCell<TreeNode>>> {
+        fn merge(
+            r1: Option<Rc<RefCell<TreeNode>>>,
+            r2: Option<Rc<RefCell<TreeNode>>>,
+        ) -> Option<Rc<RefCell<TreeNode>>> {
+            let r = Rc::new(RefCell::new(TreeNode::new(0)));
+
+            match (r1, r2) {
+                (Some(rr1), Some(rr2)) => {
+                    r.borrow_mut().val = rr1.borrow().val + rr2.borrow().val;
+                    r.borrow_mut().left =
+                        merge(rr1.borrow().left.clone(), rr2.borrow().left.clone());
+                    return Some(r);
+                }
+                (Some(rr1), None) => {
+                    r.borrow_mut().val = rr1.borrow().val;
+                    r.borrow_mut().left = merge(rr1.borrow().left.clone(), None);
+
+                    return Some(r);
+                }
+                (None, Some(rr2)) => {
+                    return Some(r);
+                }
+                _ => return None,
+            }
+        }
+
         unimplemented!()
     }
 }
