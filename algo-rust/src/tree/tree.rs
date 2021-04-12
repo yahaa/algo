@@ -536,21 +536,29 @@ impl Solution {
                     r.borrow_mut().val = rr1.borrow().val + rr2.borrow().val;
                     r.borrow_mut().left =
                         merge(rr1.borrow().left.clone(), rr2.borrow().left.clone());
+                    r.borrow_mut().right =
+                        merge(rr1.borrow().right.clone(), rr2.borrow().right.clone());
+
                     return Some(r);
                 }
                 (Some(rr1), None) => {
                     r.borrow_mut().val = rr1.borrow().val;
                     r.borrow_mut().left = merge(rr1.borrow().left.clone(), None);
+                    r.borrow_mut().right = merge(None, rr1.borrow().right.clone());
 
                     return Some(r);
                 }
                 (None, Some(rr2)) => {
+                    r.borrow_mut().val = rr2.borrow().val;
+                    r.borrow_mut().left = merge(rr2.borrow().left.clone(), None);
+                    r.borrow_mut().right = merge(None, rr2.borrow().right.clone());
+
                     return Some(r);
                 }
                 _ => return None,
             }
         }
 
-        unimplemented!()
+        merge(root1, root2)
     }
 }
