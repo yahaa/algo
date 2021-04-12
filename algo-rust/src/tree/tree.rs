@@ -526,36 +526,35 @@ impl Solution {
         root2: Option<Rc<RefCell<TreeNode>>>,
     ) -> Option<Rc<RefCell<TreeNode>>> {
         fn merge(
-            r1: Option<Rc<RefCell<TreeNode>>>,
-            r2: Option<Rc<RefCell<TreeNode>>>,
+            root1: Option<Rc<RefCell<TreeNode>>>,
+            root2: Option<Rc<RefCell<TreeNode>>>,
         ) -> Option<Rc<RefCell<TreeNode>>> {
             let r = Rc::new(RefCell::new(TreeNode::new(0)));
 
-            match (r1, r2) {
-                (Some(rr1), Some(rr2)) => {
-                    r.borrow_mut().val = rr1.borrow().val + rr2.borrow().val;
-                    r.borrow_mut().left =
-                        merge(rr1.borrow().left.clone(), rr2.borrow().left.clone());
+            match (root1, root2) {
+                (Some(r1), Some(r2)) => {
+                    r.borrow_mut().val = r1.borrow().val + r2.borrow().val;
+                    r.borrow_mut().left = merge(r1.borrow().left.clone(), r2.borrow().left.clone());
                     r.borrow_mut().right =
-                        merge(rr1.borrow().right.clone(), rr2.borrow().right.clone());
+                        merge(r1.borrow().right.clone(), r2.borrow().right.clone());
 
-                    return Some(r);
+                    Some(r)
                 }
-                (Some(rr1), None) => {
-                    r.borrow_mut().val = rr1.borrow().val;
-                    r.borrow_mut().left = merge(rr1.borrow().left.clone(), None);
-                    r.borrow_mut().right = merge(None, rr1.borrow().right.clone());
+                (Some(r1), None) => {
+                    r.borrow_mut().val = r1.borrow().val;
+                    r.borrow_mut().left = merge(r1.borrow().left.clone(), None);
+                    r.borrow_mut().right = merge(None, r1.borrow().right.clone());
 
-                    return Some(r);
+                    Some(r)
                 }
-                (None, Some(rr2)) => {
-                    r.borrow_mut().val = rr2.borrow().val;
-                    r.borrow_mut().left = merge(rr2.borrow().left.clone(), None);
-                    r.borrow_mut().right = merge(None, rr2.borrow().right.clone());
+                (None, Some(r2)) => {
+                    r.borrow_mut().val = r2.borrow().val;
+                    r.borrow_mut().left = merge(r2.borrow().left.clone(), None);
+                    r.borrow_mut().right = merge(None, r2.borrow().right.clone());
 
-                    return Some(r);
+                    Some(r)
                 }
-                _ => return None,
+                _ => None,
             }
         }
 
