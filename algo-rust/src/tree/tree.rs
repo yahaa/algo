@@ -444,15 +444,6 @@ impl Solution {
         (max % 1000000007) as i32
     }
 
-    // 399. Evaluate Division todo
-    pub fn calc_equation(
-        equations: Vec<Vec<String>>,
-        values: Vec<f64>,
-        queries: Vec<Vec<String>>,
-    ) -> Vec<f64> {
-        unimplemented!()
-    }
-
     // 1161. Maximum Level Sum of a Binary Tree
     pub fn max_level_sum(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
         if root.is_none() {
