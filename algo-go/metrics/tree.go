@@ -2,7 +2,6 @@ package metrics
 
 import (
 	"strings"
-	"sync"
 )
 
 const (
@@ -20,139 +19,113 @@ type Node struct {
 
 // PathTree prefix tree
 type PathTree struct {
-	sync.RWMutex
-	root  *Node
-	paths chan string
+	rootValue string
+	root      map[string]*Node
 	// 每一层最多能有多少个节点，超过了这个值该层就会被聚合为一个 Aggv 字符串
 	maxChild int
 }
 
 // Query query path in prefix tree return the converted path
 func (t *PathTree) Query(path string) string {
-	t.RLock()
-	defer t.RUnlock()
-
 	var (
-		parts      = t.split(path)
-		needInsert = false
-		isAgg      = t.root.IsAgg
-		children   = t.root.Children
-		result     = make([]string, 0)
+		parts  = t.split(path)
+		index  = 0
+		curs   = t.root
+		result = make([]string, 0)
 	)
 
-	for _, p := range parts {
-		if isAgg {
-			p = Aggv
+	for index < len(parts) {
+		nx, ok := curs[parts[index]]
+		if ok {
+			result = append(result, parts[index])
+			curs = nx.Children
+			index++
+			continue
 		}
 
-		node, ok := children[p]
-		if !ok {
-			needInsert = true
-			break
+		agg, ok := curs[Aggv]
+		if ok {
+			result = append(result, Aggv)
+			curs = agg.Children
+			index++
+			continue
 		}
 
-		result = append(result, node.Value)
-		children = node.Children
-		isAgg = node.IsAgg
+		break
 	}
 
-	if !needInsert {
-		return strings.Replace(strings.Join(result, "/"), t.root.Value, "", 1)
+	if index < len(parts) {
+		result = append(result, parts[index:]...)
+		// todo async insert
+		t.doInsert(curs, parts[index:])
+		// todo async aggraga
+		t.aggrega(t.root)
 	}
 
-	t.paths <- path
-	return path
+	// 去掉 root 节点
+	return "/" + strings.Join(result[1:], "/")
 }
 
-func (t *PathTree) asyncInsert() {
-	for path := range t.paths {
-		t.doInsert(path)
-	}
-}
-
-func (t *PathTree) aggrega(r *Node) {
-	if r == nil {
-		return
-	}
-
-	children := make(map[string]*Node)
-	// 孩子过多需要聚合
-	if len(r.Children) > t.maxChild {
-		for childv, child := range r.Children {
-			for vv, cc := range child.Children {
+// aggrega 对孩子过多的层级做聚合
+func (t *PathTree) aggrega(children map[string]*Node) {
+	newChildren := make(map[string]*Node)
+	if len(children) >= t.maxChild {
+		// 遍历当前层所有节点
+		for key, child := range children {
+			for kk, cc := range child.Children {
 				// 保存当前孩子的所有孩子节点
-				children[vv] = cc
+				newChildren[kk] = cc
 			}
 			// 当前孩子的孩子已经保存，可以删除当前孩子了
-			delete(r.Children, childv)
+			delete(children, key)
 		}
 
 		aggNode := &Node{
 			Value:    Aggv,
 			IsAgg:    true,
-			Children: children,
+			Children: newChildren,
 		}
 
-		r.Children[aggNode.Value] = aggNode
+		children[aggNode.Value] = aggNode
 	}
-
-	// 递归进行下层
-	for _, child := range r.Children {
-		t.aggrega(child)
+	// 递归进行下一层聚合
+	for _, child := range children {
+		t.aggrega(child.Children)
 	}
 }
 
 // split 统一给每一个 path 设置上 root value
 func (t *PathTree) split(path string) []string {
 	path = strings.Trim(path, "/")
-	path = t.root.Value + "/" + path
+	path = t.rootValue + "/" + path
 	return strings.Split(path, "/")
 }
 
 // insert parts of path into tree
-func (t *PathTree) doInsert(path string) {
-	t.Lock()
-	defer t.Unlock()
-
-	var (
-		parts  = t.split(path)
-		childs = t.root.Children
-		isAgg  = t.root.IsAgg
-	)
-
+func (t *PathTree) doInsert(curs map[string]*Node, parts []string) {
 	for _, p := range parts {
-		if isAgg {
-			p = Aggv
+		nx := &Node{
+			Value:    p,
+			Children: make(map[string]*Node),
 		}
+		curs[p] = nx
 
-		node, ok := childs[p]
-		if !ok {
-			node = &Node{
-				Value:    p,
-				Children: make(map[string]*Node),
-			}
-			childs[p] = node
-		}
-
-		childs = node.Children
-		isAgg = node.IsAgg
+		curs = nx.Children
 	}
-
-	t.aggrega(t.root)
 }
 
 // NewTree new
 func NewTree(max int) *PathTree {
 	tree := &PathTree{
-		root: &Node{
-			Value:    "=root=",
-			Children: make(map[string]*Node),
+		rootValue: "root",
+		root: map[string]*Node{
+			"root": {
+				Value:    "root",
+				Children: make(map[string]*Node),
+			},
 		},
-		paths:    make(chan string, 10000),
 		maxChild: max,
 	}
-
-	go tree.asyncInsert()
 
 	return tree
 }
