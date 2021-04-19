@@ -1,6 +1,7 @@
 package metrics
 
 import (
+	"fmt"
 	"testing"
 	"time"
 )
@@ -39,5 +40,13 @@ func Test_Tree(t *testing.T) {
 				t.Errorf("want: %v, got: %v", c.want, got)
 			}
 		})
+	}
+}
+
+func BenchmarkQueryMax100(b *testing.B) {
+	tree := NewAggreTree(100)
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		tree.Query(fmt.Sprintf("/%d/%d/%d", i, i, i))
 	}
 }
