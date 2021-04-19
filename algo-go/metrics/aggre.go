@@ -125,7 +125,7 @@ func (t *AggreTree) doInsert(curs map[string]*node, parts []string) {
 
 // NewAggreTree new
 func NewAggreTree(max int) *AggreTree {
-	tree := &AggreTree{
+	return &AggreTree{
 		rootValue: rootValue,
 		root: map[string]*node{
 			rootValue: {
@@ -135,6 +135,4 @@ func NewAggreTree(max int) *AggreTree {
 		},
 		maxChild: max,
 	}
-
-	return tree
 }
