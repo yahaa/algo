@@ -561,11 +561,29 @@ impl Solution {
         merge(root1, root2)
     }
 
-    // 1325. Delete Leaves With a Given Value todo
+    // 1325. Delete Leaves With a Given Value
     pub fn remove_leaf_nodes(
         root: Option<Rc<RefCell<TreeNode>>>,
         target: i32,
     ) -> Option<Rc<RefCell<TreeNode>>> {
-        unimplemented!()
+        match root {
+            None => None,
+            Some(r) => {
+                let left = Solution::remove_leaf_nodes(r.borrow().left.clone(), target);
+                let right = Solution::remove_leaf_nodes(r.borrow().right.clone(), target);
+
+                r.borrow_mut().left = left;
+                r.borrow_mut().right = right;
+
+                if r.borrow().left.is_none()
+                    && r.borrow().right.is_none()
+                    && r.borrow().val == target
+                {
+                    return None;
+                }
+
+                Some(r)
+            }
+        }
     }
 }
