@@ -586,4 +586,9 @@ impl Solution {
             }
         }
     }
+
+    // 814. Binary Tree Pruning todo
+    pub fn prune_tree(root: Option<Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeNode>>> {
+        unimplemented!()
+    }
 }
