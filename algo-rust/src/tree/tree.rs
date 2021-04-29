@@ -587,8 +587,23 @@ impl Solution {
         }
     }
 
-    // 814. Binary Tree Pruning todo
+    // 814. Binary Tree Pruning
     pub fn prune_tree(root: Option<Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeNode>>> {
-        unimplemented!()
+        match root {
+            None => None,
+            Some(r) => {
+                let left = Solution::prune_tree(r.borrow().left.clone());
+                let right = Solution::prune_tree(r.borrow().right.clone());
+
+                r.borrow_mut().left = left;
+                r.borrow_mut().right = right;
+
+                if r.borrow().left.is_none() && r.borrow().right.is_none() && r.borrow().val == 0 {
+                    return None;
+                }
+
+                Some(r)
+            }
+        }
     }
 }
