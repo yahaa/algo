@@ -607,8 +607,35 @@ impl Solution {
         }
     }
 
-    // 513. Find Bottom Left Tree Value todo
+    // 513. Find Bottom Left Tree Value
     pub fn find_bottom_left_value(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
-        unimplemented!()
+        if root.is_none() {
+            return 0;
+        }
+
+        let (mut res, mut queue) = (0, VecDeque::new());
+
+        queue.push_back(root.unwrap().clone());
+
+        while queue.len() > 0 {
+            let size = queue.len();
+            for i in 0..size {
+                if let Some(top) = queue.pop_front() {
+                    if top.borrow().left.is_some() {
+                        queue.push_back(top.borrow().left.clone().unwrap());
+                    }
+
+                    if top.borrow().right.is_some() {
+                        queue.push_back(top.borrow().right.clone().unwrap());
+                    }
+
+                    if i == 0 {
+                        res = top.borrow().val;
+                    }
+                }
+            }
+        }
+
+        res
     }
 }
