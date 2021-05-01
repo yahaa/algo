@@ -638,9 +638,4 @@ impl Solution {
 
         res
     }
-
-    // 1162. As Far from Land as Possible todo
-    pub fn max_distance(grid: Vec<Vec<i32>>) -> i32 {
-        unimplemented!()
-    }
 }

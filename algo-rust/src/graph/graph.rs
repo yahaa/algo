@@ -250,10 +250,80 @@ impl Solution {
 
         res
     }
+    // 1162. As Far from Land as Possible todo
+    pub fn max_distance(grid: Vec<Vec<i32>>) -> i32 {
+        static DIR: [[i32; 2]; 4] = [[0, -1], [0, 1], [-1, 0], [1, 0]];
+
+        fn bfs(grid: &Vec<Vec<i32>>, i: i32, j: i32, n: i32, m: i32) -> i32 {
+            let (mut w, mut queue) = (1, VecDeque::new());
+            let mut visit = vec![vec![0; m as usize]; n as usize];
+
+            queue.push_back((i, j));
+
+            while queue.len() > 0 {
+                let mut size = queue.len();
+
+                while size > 0 {
+                    let (i, j) = queue.pop_front().unwrap();
+                    visit[i as usize][j as usize] = 1;
+
+                    for k in 0..4 {
+                        let x = DIR[k][0] + i;
+                        let y = DIR[k][1] + j;
+
+                        if x < 0 || x >= n || y < 0 || y >= m || visit[x as usize][y as usize] == 1
+                        {
+                            continue;
+                        }
+
+                        if grid[x as usize][y as usize] == 1 {
+                            return w;
+                        }
+
+                        queue.push_back((x, y));
+                    }
+
+                    size -= 1;
+                }
+
+                w += 1;
+            }
+
+            -1
+        }
+
+        let (n, m) = (grid.len(), grid[0].len());
+
+        let mut res = -1;
+
+        for i in 0..n {
+            for j in 0..m {
+                if grid[i][j] == 0 {
+                    let d = bfs(&grid, i as i32, j as i32, n as i32, m as i32);
+
+                    if d == -1 {
+                        return d;
+                    }
+                    res = std::cmp::max(res, d);
+                }
+            }
+        }
+
+        res
+    }
 }
 #[cfg(test)]
 mod test {
     use super::*;
+
+    #[test]
+    fn max_distance() {
+        let a = vec![vec![1, 0, 1], vec![0, 0, 0], vec![1, 0, 1]];
+        assert_eq!(2, Solution::max_distance(a));
+
+        let a = vec![vec![1, 0, 0], vec![0, 0, 0], vec![0, 0, 0]];
+        assert_eq!(4, Solution::max_distance(a));
+    }
 
     #[test]
     fn shortest_bridge() {
