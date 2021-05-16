@@ -638,4 +638,9 @@ impl Solution {
 
         res
     }
+
+    // 1022. Sum of Root To Leaf Binary Numbers todo
+    pub fn sum_root_to_leaf(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+        unimplemented!()
+    }
 }
