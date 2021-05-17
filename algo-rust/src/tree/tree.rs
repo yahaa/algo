@@ -639,8 +639,26 @@ impl Solution {
         res
     }
 
-    // 1022. Sum of Root To Leaf Binary Numbers todo
+    // 1022. Sum of Root To Leaf Binary Numbers
     pub fn sum_root_to_leaf(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
-        unimplemented!()
+        fn dfs(root: Option<Rc<RefCell<TreeNode>>>, mut cur: i32) -> i32 {
+            match root {
+                Some(r) => {
+                    cur = (cur << 1) ^ r.borrow().val;
+
+                    let mut sum =
+                        dfs(r.borrow().left.clone(), cur) + dfs(r.borrow().right.clone(), cur);
+
+                    if r.borrow().left.is_none() && r.borrow().right.is_none() {
+                        sum += cur;
+                    }
+
+                    sum
+                }
+                None => 0,
+            }
+        }
+
+        dfs(root, 0)
     }
 }
