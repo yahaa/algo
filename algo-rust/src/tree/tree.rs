@@ -661,4 +661,9 @@ impl Solution {
 
         dfs(root, 0)
     }
+
+    // 687. Longest Univalue Path todo
+    pub fn longest_univalue_path(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+        unimplemented!()
+    }
 }
