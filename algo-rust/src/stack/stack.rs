@@ -223,6 +223,22 @@ impl Solution {
 
         s.len() == 0
     }
+
+    // leetcode 1614
+    pub fn max_depth(s: String) -> i32 {
+        let (mut stack, mut ans) = (Vec::new(), 0);
+
+        for c in s.chars() {
+            if c == '(' {
+                stack.push(c);
+            } else if c == ')' {
+                ans = std::cmp::max(ans, stack.len());
+                stack.pop();
+            }
+        }
+
+        ans as i32
+    }
 }
 
 #[cfg(test)]
@@ -232,6 +248,13 @@ mod test {
     #[test]
     fn is_valid() {
         assert_eq!(true, Solution::is_valid("aabcbc".to_string()));
+    }
+
+    #[test]
+    fn max_depth() {
+        assert_eq!(3, Solution::max_depth("(1+(2*3)+((8)/4))+1".to_string()));
+        assert_eq!(3, Solution::max_depth("(1)+((2))+(((3)))".to_string()));
+        assert_eq!(1, Solution::max_depth("1+(2*3)/(2-1)".to_string()));
     }
 
     #[test]
