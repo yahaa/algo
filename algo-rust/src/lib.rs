@@ -3,6 +3,7 @@
 mod bit;
 mod design;
 mod graph;
+mod hash;
 mod heap;
 mod linkedlist;
 mod recursive;
