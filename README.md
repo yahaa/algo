@@ -5,4 +5,5 @@
 * algo-go 用 go 刷的算法题
 * algo-rust 用 rust 刷的算法题
 * rust 生命周期管理
+* rust async/await
 
