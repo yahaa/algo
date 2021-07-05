@@ -24,3 +24,30 @@ func IsUnivalTree(root *Node) bool {
 
 	return dfs(root, root.Val)
 }
+
+// leetcode 589
+type NNode struct {
+	Val      int
+	Children []*NNode
+}
+
+// preorder
+func preorder(root *NNode) []int {
+	res := make([]int, 0)
+	var dfs func(root *NNode)
+
+	dfs = func(root *NNode) {
+		if root == nil {
+			return
+		}
+
+		res = append(res, root.Val)
+
+		for _, c := range root.Children {
+			dfs(c)
+		}
+	}
+
+	dfs(root)
+	return res
+}
