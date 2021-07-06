@@ -1,5 +1,7 @@
 package tree
 
+import "container/list"
+
 // Node node int value
 type Node struct {
 	Val   int
@@ -31,7 +33,7 @@ type NNode struct {
 	Children []*NNode
 }
 
-// preorder
+// preorder leetcode 589
 func preorder(root *NNode) []int {
 	res := make([]int, 0)
 	var dfs func(root *NNode)
@@ -50,4 +52,31 @@ func preorder(root *NNode) []int {
 
 	dfs(root)
 	return res
+}
+
+// levelOrder 429
+func levelOrder(root *NNode) [][]int {
+	result := make([][]int, 0)
+	if root == nil {
+		return nil
+	}
+
+	queue := list.New()
+	queue.PushBack(root)
+
+	for queue.Len() > 0 {
+		levelLen := queue.Len()
+		levelVals := make([]int, 0)
+		for levelLen > 0 {
+			top := queue.Remove(queue.Front()).(*NNode)
+			for _, n := range top.Children {
+				queue.PushBack(n)
+			}
+			levelVals = append(levelVals, top.Val)
+			levelLen--
+		}
+
+		result = append(result, levelVals)
+	}
+	return result
 }
