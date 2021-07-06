@@ -80,3 +80,23 @@ func levelOrder(root *NNode) [][]int {
 	}
 	return result
 }
+
+// leetcode 590
+func postorder(root *NNode) []int {
+	var dfs func(root *NNode)
+	var res []int
+
+	dfs = func(root *NNode) {
+		if root == nil {
+			return
+		}
+
+		for _, n := range root.Children {
+			dfs(n)
+		}
+		res = append(res, root.Val)
+	}
+
+	dfs(root)
+	return res
+}
