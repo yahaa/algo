@@ -11,6 +11,7 @@ mod search;
 mod stack;
 mod strings;
 mod tree;
+mod weeks;
 
 use std::cmp;
 use std::collections::HashMap;
