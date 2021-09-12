@@ -1,5 +1,15 @@
 #![allow(dead_code)]
+#![allow(unused_macros)]
 
+macro_rules! map(
+    { $($key:expr => $value:expr),+ } => {
+        {
+            let mut m = ::std::collections::HashMap::new();
+            $(m.insert($key, $value);)+
+            m
+        }
+     };
+);
 struct Solution {}
 
 impl Solution {
@@ -56,6 +66,22 @@ impl Solution {
 
         result.into_iter().rev().map(|x| x.to_string()).collect()
     }
+
+    // leetcode 168
+    pub fn convert_to_title(mut column_number: i32) -> String {
+        let base = 'A' as u8;
+        let mut result = String::new();
+
+        while column_number > 0 {
+            column_number -= 1;
+
+            let c = (column_number % 26) as u8 + base;
+            result.push(c as char);
+
+            column_number /= 26;
+        }
+        result.chars().rev().collect()
+    }
 }
 
 #[cfg(test)]
@@ -71,6 +97,15 @@ mod test {
             Solution::min_steps("leetcode".to_string(), "practice".to_string())
         );
     }
+    #[test]
+    fn convert_to_title() {
+        assert_eq!("A", Solution::convert_to_title(1));
+        assert_eq!("AB", Solution::convert_to_title(28));
+        assert_eq!("ZY", Solution::convert_to_title(701));
+        assert_eq!("FXSHRXW", Solution::convert_to_title(2147483647));
+        assert_eq!("AZ", Solution::convert_to_title(52));
+    }
+
     #[test]
     fn multiply() {
         assert_eq!(
