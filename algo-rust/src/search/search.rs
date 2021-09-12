@@ -1,6 +1,9 @@
 #![allow(dead_code)]
 
-use std::cmp::{self, max, min};
+use std::{
+    cmp::{self, max, min},
+    collections::HashMap,
+};
 
 struct Solution {}
 
@@ -470,6 +473,20 @@ impl Solution {
             }
         }
         return false;
+    }
+
+    // leetcode 771
+    pub fn num_jewels_in_stones(jewels: String, stones: String) -> i32 {
+        let (mut jes, mut res) = (HashMap::new(), 0);
+        jewels.chars().for_each(|x| *jes.entry(x).or_insert(1) += 1);
+
+        stones.chars().for_each(|x| {
+            if let Some(_a) = jes.get(&x) {
+                res += 1
+            }
+        });
+
+        res
     }
 }
 
