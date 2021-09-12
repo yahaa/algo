@@ -499,6 +499,11 @@ impl Solution {
 
         result.into_iter().collect()
     }
+
+    // leetcode 1678
+    pub fn interpret(command: String) -> String {
+        command.replace("(al)", "al").replace("()", "o")
+    }
 }
 
 #[cfg(test)]
