@@ -18,6 +18,44 @@ impl Solution {
 
         count.into_iter().filter(|x| *x > 0).sum()
     }
+
+    // leetcode 43
+    pub fn multiply(num1: &String, num2: &String) -> String {
+        let n1: Vec<u32> = num1
+            .chars()
+            .rev()
+            .map(|x| x.to_digit(10).unwrap())
+            .collect();
+        let n2: Vec<u32> = num2
+            .chars()
+            .rev()
+            .map(|x| x.to_digit(10).unwrap())
+            .collect();
+
+        let n = n1.len();
+        let m = n2.len();
+
+        let mut result = vec![0; n + m];
+        let mut c = 0;
+
+        for i in 0..n {
+            for j in 0..m {
+                let sum = result[i + j] + c + n1[i] * n2[j];
+                result[i + j] = sum % 10;
+                c = sum / 10;
+            }
+            if c > 0 {
+                result[i + m] = c;
+                c = 0;
+            }
+        }
+
+        while result.len() > 1 && result.last() == Some(&0) {
+            result.pop();
+        }
+
+        result.into_iter().rev().map(|x| x.to_string()).collect()
+    }
 }
 
 #[cfg(test)]
@@ -32,5 +70,22 @@ mod test {
             5,
             Solution::min_steps("leetcode".to_string(), "practice".to_string())
         );
+    }
+    #[test]
+    fn multiply() {
+        assert_eq!(
+            "10",
+            Solution::multiply(&"1".to_string(), &"10".to_string())
+        );
+        assert_eq!(
+            "9801",
+            Solution::multiply(&"99".to_string(), &"99".to_string())
+        );
+        assert_eq!("6", Solution::multiply(&"2".to_string(), &"3".to_string()));
+        assert_eq!(
+            "56088",
+            Solution::multiply(&"123".to_string(), &"456".to_string())
+        );
+        assert_eq!("0", Solution::multiply(&"1".to_string(), &"0".to_string()));
     }
 }
