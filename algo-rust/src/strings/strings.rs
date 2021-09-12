@@ -82,6 +82,11 @@ impl Solution {
         }
         result.chars().rev().collect()
     }
+
+    // leetcode 1108
+    pub fn defang_i_paddr(address: String) -> String {
+        address.replace(".", "[.]")
+    }
 }
 
 #[cfg(test)]
