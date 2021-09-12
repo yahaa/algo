@@ -488,6 +488,17 @@ impl Solution {
 
         res
     }
+    // leetcode 1528
+    pub fn restore_string(s: String, indices: Vec<i32>) -> String {
+        let mut result = vec!['0'; s.len()];
+        let ss: Vec<char> = s.chars().collect();
+        indices
+            .into_iter()
+            .enumerate()
+            .for_each(|(i, x)| result[x as usize] = ss[i]);
+
+        result.into_iter().collect()
+    }
 }
 
 #[cfg(test)]
