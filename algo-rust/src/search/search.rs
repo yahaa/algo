@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-use std::cmp::{max, min};
+use std::cmp::{self, max, min};
 
 struct Solution {}
 
@@ -452,6 +452,24 @@ impl Solution {
         }
 
         true
+    }
+
+    // leetcode 74
+    pub fn search_matrix(matrix: Vec<Vec<i32>>, target: i32) -> bool {
+        let (n, m) = (matrix.len() as i32, matrix[0].len() as i32);
+        let (mut start, mut end) = (0, n * m - 1);
+
+        while start <= end {
+            let mid = (end - start) / 2 + start;
+            let (i, j) = (mid / m, mid % m);
+
+            match target.cmp(&matrix[i as usize][j as usize]) {
+                std::cmp::Ordering::Equal => return true,
+                std::cmp::Ordering::Less => end = mid - 1,
+                std::cmp::Ordering::Greater => start = mid + 1,
+            }
+        }
+        return false;
     }
 }
 
