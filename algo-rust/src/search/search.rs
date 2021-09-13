@@ -536,6 +536,19 @@ impl Solution {
 
         ans
     }
+
+    // leetcode 1859
+    pub fn sort_sentence(s: String) -> String {
+        let ss: Vec<&str> = s.split(" ").collect();
+        let mut result = vec![""; ss.len()];
+
+        ss.into_iter().filter(|x| return x.len() > 0).for_each(|x| {
+            let index: usize = x[x.len() - 1..].parse().unwrap();
+            result[index - 1] = &x[..x.len() - 1];
+        });
+
+        result.join(" ")
+    }
 }
 
 #[cfg(test)]
