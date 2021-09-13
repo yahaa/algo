@@ -515,6 +515,27 @@ impl Solution {
 
         items.iter().filter(|x| x[key] == rule_value).count() as i32
     }
+
+    // leetcode 1221
+    pub fn balanced_string_split(s: String) -> i32 {
+        let (mut l, mut r, mut ans) = (0, 0, 0);
+
+        s.chars().for_each(|x| {
+            match x {
+                'L' => l += 1,
+                'R' => r += 1,
+                _ => {}
+            }
+
+            if l == r {
+                l = 0;
+                r = 0;
+                ans += 1;
+            }
+        });
+
+        ans
+    }
 }
 
 #[cfg(test)]
