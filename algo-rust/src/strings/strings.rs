@@ -1,6 +1,8 @@
 #![allow(dead_code)]
 #![allow(unused_macros)]
 
+use std::{collections::HashMap, ptr::NonNull};
+
 macro_rules! map(
     { $($key:expr => $value:expr),+ } => {
         {
@@ -86,6 +88,28 @@ impl Solution {
     // leetcode 1108
     pub fn defang_i_paddr(address: String) -> String {
         address.replace(".", "[.]")
+    }
+
+    // leetcode 1684
+    pub fn count_consistent_strings(allowed: String, words: Vec<String>) -> i32 {
+        let (mut map, mut result) = (HashMap::new(), words.len() as i32);
+
+        for c in allowed.chars() {
+            map.entry(c).or_insert(1);
+        }
+
+        words.into_iter().for_each(|s| {
+            for c in s.chars() {
+                match map.get(&c) {
+                    None => {
+                        result -= 1;
+                        break;
+                    }
+                    _ => {}
+                };
+            }
+        });
+        result
     }
 }
 
