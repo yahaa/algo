@@ -1,5 +1,6 @@
 #![feature(map_first_last)]
 
+mod array;
 mod bit;
 mod design;
 mod graph;
