@@ -549,6 +549,11 @@ impl Solution {
 
         result.join(" ")
     }
+
+    // leetcode 1920
+    pub fn build_array(nums: Vec<i32>) -> Vec<i32> {
+        nums.iter().map(|n| nums[*n as usize]).collect()
+    }
 }
 
 #[cfg(test)]
