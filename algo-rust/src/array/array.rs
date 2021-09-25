@@ -1,6 +1,29 @@
 #![allow(dead_code)]
 use std::cmp::{max, min};
+use std::collections::BinaryHeap;
+use std::{
+    cmp::{Ord, Ordering},
+    vec,
+};
 struct Solution {}
+
+#[derive(Copy, Clone, Eq, PartialEq, Ord, Debug)]
+struct Val {
+    pub v: i32,
+    pub index: (i32, i32),
+}
+
+impl Val {
+    pub fn new(v: i32, index: (i32, i32)) -> Self {
+        Val { v, index }
+    }
+}
+
+impl PartialOrd for Val {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        other.v.partial_cmp(&self.v)
+    }
+}
 
 impl Solution {
     // leetcode 1920
@@ -69,60 +92,62 @@ impl Solution {
         result
     }
 
-    // leetcode 407 todo
-    pub fn trap_rain_water(height_map: Vec<Vec<i32>>) -> i32 {
-        let (n, m) = (height_map.len(), height_map[0].len());
-
-        let mut left = vec![vec![0; m]; n];
-        let mut right = vec![vec![0; m]; n];
-        let mut up = vec![vec![0; m]; n];
-        let mut down = vec![vec![0; m]; n];
+    // leetcode 407
+    pub fn trap_rain_water(mut height: Vec<Vec<i32>>) -> i32 {
+        let (n, m) = (height.len(), height[0].len());
+        let mut heap = BinaryHeap::new();
 
         for i in 0..n {
-            left[i][0] = height_map[i][0];
-            right[i][m - 1] = height_map[i][m - 1];
+            heap.push(Val::new(height[i][0], (i as i32, 0)));
+            heap.push(Val::new(height[i][m - 1], (i as i32, (m - 1) as i32)));
+            height[i][0] = -1;
+            height[i][m - 1] = -1;
         }
 
-        for j in 0..m {
-            up[0][j] = height_map[0][j];
-            down[n - 1][j] = height_map[n - 1][j];
+        for j in 1..m - 1 {
+            heap.push(Val::new(height[0][j], (0, j as i32)));
+            heap.push(Val::new(height[n - 1][j], ((n - 1) as i32, j as i32)));
+
+            height[0][j] = -1;
+            height[n - 1][j] = -1;
         }
 
-        for i in 0..n {
-            for j in 1..m {
-                left[i][j] = max(left[i][j - 1], height_map[i][j]);
-            }
-
-            for j in (0..m - 1).rev() {
-                right[i][j] = max(right[i][j + 1], height_map[i][j]);
-            }
-        }
-
-        for j in 0..m {
-            for i in 1..n {
-                up[i][j] = max(up[i - 1][j], height_map[i][j]);
-            }
-
-            for i in (0..n - 1).rev() {
-                down[i][j] = max(down[i + 1][j], height_map[i][j]);
-            }
-        }
-
+        let dir = vec![[-1, 0], [1, 0], [0, -1], [0, 1]];
         let mut result = 0;
 
-        for i in 0..n {
-            for j in 0..m {
-                result +=
-                    height_map[i][j] - min(min(left[i][j], right[i][j]), min(up[i][j], down[i][j]));
-            }
-        }
+        while let Some(top) = heap.pop() {
+            dir.iter().for_each(|d| {
+                let x = d[0] + top.index.0;
+                let y = d[1] + top.index.1;
 
+                if x >= n as i32 || x < 0 || y >= m as i32 || y < 0 {
+                    return;
+                }
+
+                let x = x as usize;
+                let y = y as usize;
+
+                if height[x][y] == -1 {
+                    return;
+                }
+
+                if height[x][y] < top.v {
+                    result += top.v - height[x][y];
+                    heap.push(Val::new(top.v, (x as i32, y as i32)));
+                } else {
+                    heap.push(Val::new(height[x][y], (x as i32, y as i32)));
+                }
+                height[x][y] = -1;
+            });
+        }
         result
     }
 }
 
 #[cfg(test)]
 mod test {
+    use std::collections::BinaryHeap;
+
     use super::*;
 
     #[test]
@@ -131,6 +156,18 @@ mod test {
             vec![4, 5, 0, 1, 2, 3],
             Solution::build_array(vec![5, 0, 1, 2, 3, 4])
         );
+    }
+
+    #[test]
+    fn trap_rain_water() {
+        let input = vec![
+            vec![9, 9, 9, 9, 9, 9, 8, 9, 9, 9, 9],
+            vec![9, 0, 0, 0, 0, 0, 1, 0, 0, 0, 9],
+            vec![9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            vec![9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+            vec![9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
+        ];
+        assert_eq!(215, Solution::trap_rain_water(input));
     }
 
     #[test]
@@ -148,5 +185,17 @@ mod test {
         ];
 
         assert_eq!(true, Solution::is_valid_sudoku(input));
+    }
+
+    #[test]
+    fn val_struct() {
+        let mut heap = BinaryHeap::new();
+        heap.push(Val::new(1, (0, 0)));
+        heap.push(Val::new(3, (0, 0)));
+        heap.push(Val::new(2, (0, 0)));
+
+        assert_eq!(Val::new(1, (0, 0)), heap.pop().unwrap());
+        assert_eq!(Val::new(2, (0, 0)), heap.pop().unwrap());
+        assert_eq!(Val::new(3, (0, 0)), heap.pop().unwrap());
     }
 }
