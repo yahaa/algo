@@ -68,6 +68,57 @@ impl Solution {
 
         result
     }
+
+    // leetcode 407 todo
+    pub fn trap_rain_water(height_map: Vec<Vec<i32>>) -> i32 {
+        let (n, m) = (height_map.len(), height_map[0].len());
+
+        let mut left = vec![vec![0; m]; n];
+        let mut right = vec![vec![0; m]; n];
+        let mut up = vec![vec![0; m]; n];
+        let mut down = vec![vec![0; m]; n];
+
+        for i in 0..n {
+            left[i][0] = height_map[i][0];
+            right[i][m - 1] = height_map[i][m - 1];
+        }
+
+        for j in 0..m {
+            up[0][j] = height_map[0][j];
+            down[n - 1][j] = height_map[n - 1][j];
+        }
+
+        for i in 0..n {
+            for j in 1..m {
+                left[i][j] = max(left[i][j - 1], height_map[i][j]);
+            }
+
+            for j in (0..m - 1).rev() {
+                right[i][j] = max(right[i][j + 1], height_map[i][j]);
+            }
+        }
+
+        for j in 0..m {
+            for i in 1..n {
+                up[i][j] = max(up[i - 1][j], height_map[i][j]);
+            }
+
+            for i in (0..n - 1).rev() {
+                down[i][j] = max(down[i + 1][j], height_map[i][j]);
+            }
+        }
+
+        let mut result = 0;
+
+        for i in 0..n {
+            for j in 0..m {
+                result +=
+                    height_map[i][j] - min(min(left[i][j], right[i][j]), min(up[i][j], down[i][j]));
+            }
+        }
+
+        result
+    }
 }
 
 #[cfg(test)]
