@@ -1,5 +1,5 @@
 #![allow(dead_code)]
-
+use std::cmp::{max, min};
 struct Solution {}
 
 impl Solution {
@@ -41,6 +41,32 @@ impl Solution {
             }
         }
         true
+    }
+
+    // leetcode 42 dp
+    pub fn trap(height: Vec<i32>) -> i32 {
+        let n = height.len();
+        let mut a1 = vec![0; n];
+        let mut a2 = vec![0; n];
+
+        a1[0] = height[0];
+        a2[n - 1] = height[n - 1];
+
+        for i in 1..n {
+            a1[i] = max(a1[i], max(a1[i - 1], height[i]));
+        }
+
+        for i in (0..n - 1).rev() {
+            a2[i] = max(a2[i], max(a2[i + 1], height[i]));
+        }
+
+        let mut result = 0;
+
+        for i in 0..n {
+            result += min(a1[i], a2[i]) - height[i];
+        }
+
+        result
     }
 }
 
