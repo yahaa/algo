@@ -142,6 +142,57 @@ impl Solution {
         }
         result
     }
+
+    // leetcode 51
+    pub fn solve_n_queens(n: i32) -> Vec<Vec<String>> {
+        fn validate(board: &Vec<Vec<char>>, i: i32, j: i32, n: i32) -> bool {
+            let (ri, rj) = (i - min(i, j), j - min(i, j));
+            let (li, lj) = (i - min(i, n - 1 - j), j + min(i, n - 1 - j));
+
+            for k in 0..n {
+                if board[i as usize][k as usize] == 'Q'
+                    || board[k as usize][j as usize] == 'Q'
+                    || (ri + k < n
+                        && rj + k < n
+                        && board[(ri + k) as usize][(rj + k) as usize] == 'Q')
+                    || (li + k < n
+                        && lj - k >= 0
+                        && board[(li + k) as usize][(lj - k) as usize] == 'Q')
+                {
+                    return false;
+                }
+            }
+
+            true
+        }
+
+        fn dfs(i: i32, n: i32, result: &mut Vec<Vec<String>>, board: &mut Vec<Vec<char>>) {
+            if i == n {
+                let mut res = vec![];
+                board.iter().for_each(|row| {
+                    res.push(row.into_iter().collect());
+                });
+
+                result.push(res);
+                return;
+            }
+
+            for j in 0..n {
+                if validate(board, i, j, n) {
+                    board[i as usize][j as usize] = 'Q';
+                    dfs(i + 1, n, result, board);
+                    board[i as usize][j as usize] = '.';
+                }
+            }
+        }
+
+        let mut result = Vec::new();
+        let mut board = vec![vec!['.'; n as usize]; n as usize];
+
+        dfs(0, n, &mut result, &mut board);
+
+        result
+    }
 }
 
 #[cfg(test)]
@@ -149,6 +200,33 @@ mod test {
     use std::collections::BinaryHeap;
 
     use super::*;
+
+    #[test]
+    fn solve_n_queens() {
+        let res = vec![vec!["Q"]];
+        assert_eq!(res, Solution::solve_n_queens(1));
+
+        let res = vec![
+            vec![".Q..", "...Q", "Q...", "..Q."],
+            vec!["..Q.", "Q...", "...Q", ".Q.."],
+        ];
+        assert_eq!(res, Solution::solve_n_queens(4));
+
+        let res = vec![
+            vec!["Q....", "..Q..", "....Q", ".Q...", "...Q."],
+            vec!["Q....", "...Q.", ".Q...", "....Q", "..Q.."],
+            vec![".Q...", "...Q.", "Q....", "..Q..", "....Q"],
+            vec![".Q...", "....Q", "..Q..", "Q....", "...Q."],
+            vec!["..Q..", "Q....", "...Q.", ".Q...", "....Q"],
+            vec!["..Q..", "....Q", ".Q...", "...Q.", "Q...."],
+            vec!["...Q.", "Q....", "..Q..", "....Q", ".Q..."],
+            vec!["...Q.", ".Q...", "....Q", "..Q..", "Q...."],
+            vec!["....Q", ".Q...", "...Q.", "Q....", "..Q.."],
+            vec!["....Q", "..Q..", "Q....", "...Q.", ".Q..."],
+        ];
+
+        assert_eq!(res, Solution::solve_n_queens(5));
+    }
 
     #[test]
     fn build_array() {
