@@ -193,6 +193,51 @@ impl Solution {
 
         result
     }
+
+    // leetcode 52
+    pub fn total_n_queens(n: i32) -> i32 {
+        fn validate(board: &Vec<Vec<char>>, i: i32, j: i32, n: i32) -> bool {
+            let (ri, rj) = (i - min(i, j), j - min(i, j));
+            let (li, lj) = (i - min(i, n - 1 - j), j + min(i, n - 1 - j));
+
+            for k in 0..n {
+                if board[i as usize][k as usize] == 'Q'
+                    || board[k as usize][j as usize] == 'Q'
+                    || (ri + k < n
+                        && rj + k < n
+                        && board[(ri + k) as usize][(rj + k) as usize] == 'Q')
+                    || (li + k < n
+                        && lj - k >= 0
+                        && board[(li + k) as usize][(lj - k) as usize] == 'Q')
+                {
+                    return false;
+                }
+            }
+
+            true
+        }
+
+        fn dfs(i: i32, n: i32, result: &mut i32, board: &mut Vec<Vec<char>>) {
+            if i == n {
+                *result += 1;
+                return;
+            }
+
+            for j in 0..n {
+                if validate(board, i, j, n) {
+                    board[i as usize][j as usize] = 'Q';
+                    dfs(i + 1, n, result, board);
+                    board[i as usize][j as usize] = '.';
+                }
+            }
+        }
+
+        let (mut board, mut result) = (vec![vec!['.'; n as usize]; n as usize], 0);
+
+        dfs(0, n, &mut result, &mut board);
+
+        result
+    }
 }
 
 #[cfg(test)]
