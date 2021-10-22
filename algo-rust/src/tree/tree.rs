@@ -317,7 +317,7 @@ impl Solution {
     }
 
     // leetcode 501
-    pub fn find_mode(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
+    pub fn find_mode(_root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
         //        let mut map: HashMap<i32, Vec<i32>> = HashMap::new();
         //        let mut max_count = 0;
         //
@@ -514,8 +514,8 @@ impl Solution {
 
     // 701. Insert into a Binary Search Tree todo
     pub fn insert_into_bst(
-        root: Option<Rc<RefCell<TreeNode>>>,
-        val: i32,
+        _root: Option<Rc<RefCell<TreeNode>>>,
+        _val: i32,
     ) -> Option<Rc<RefCell<TreeNode>>> {
         unimplemented!()
     }
@@ -663,7 +663,7 @@ impl Solution {
     }
 
     // 687. Longest Univalue Path todo
-    pub fn longest_univalue_path(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+    pub fn longest_univalue_path(_root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
         unimplemented!()
     }
 }

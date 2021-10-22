@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 #![allow(unused_macros)]
 
-use std::{collections::HashMap, ptr::NonNull};
+use std::{collections::HashMap};
 
 macro_rules! map(
     { $($key:expr => $value:expr),+ } => {

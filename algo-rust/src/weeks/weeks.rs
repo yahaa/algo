@@ -13,7 +13,7 @@ impl Solution {
         res
     }
 
-    pub fn find_closest_elements(arr: Vec<i32>, k: i32, x: i32) -> Vec<i32> {
+    pub fn find_closest_elements(_arr: Vec<i32>, _k: i32, _x: i32) -> Vec<i32> {
         unimplemented!()
     }
 }

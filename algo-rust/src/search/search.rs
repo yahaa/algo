@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 
 use std::{
-    cmp::{self, max, min},
+    cmp::{max, min},
     collections::HashMap,
 };
 
