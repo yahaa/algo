@@ -238,6 +238,30 @@ impl Solution {
 
         result
     }
+    // leetcode 1365
+    pub fn smaller_numbers_than_current(nums: Vec<i32>) -> Vec<i32> {
+        let mut hash = vec![0; 101];
+
+        nums.iter().for_each(|x| {
+            hash[*x as usize] += 1;
+        });
+
+        for i in 1..101 {
+            hash[i] += hash[i - 1];
+        }
+
+        let mut result = vec![0; nums.len()];
+
+        nums.into_iter().enumerate().for_each(|(i, v)| {
+            if v == 0 {
+                result[i] = 0;
+            } else {
+                result[i] = hash[(v - 1) as usize];
+            }
+        });
+
+        result
+    }
 }
 
 #[cfg(test)]
@@ -245,6 +269,15 @@ mod test {
     use std::collections::BinaryHeap;
 
     use super::*;
+
+    #[test]
+    fn smaller_numbers_than_current() {
+        let nums = vec![8, 1, 2, 2, 3];
+        assert_eq!(
+            vec![4, 0, 1, 1, 3],
+            Solution::smaller_numbers_than_current(nums)
+        );
+    }
 
     #[test]
     fn solve_n_queens() {
