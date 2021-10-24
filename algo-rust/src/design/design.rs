@@ -169,6 +169,41 @@ impl StockSpanner {
     }
 }
 
+// leetcode 1656
+struct OrderedStream {
+    array: Vec<String>,
+    len: i32,
+    index: usize,
+}
+
+impl OrderedStream {
+    fn new(n: i32) -> Self {
+        OrderedStream {
+            array: vec!["".to_string(); n as usize],
+            len: n,
+            index: 0,
+        }
+    }
+
+    fn insert(&mut self, id_key: i32, value: String) -> Vec<String> {
+        let id_key = id_key - 1;
+
+        let mut result = Vec::new();
+        if id_key >= self.len {
+            return result;
+        }
+
+        self.array[id_key as usize] = value;
+
+        while self.index < self.len as usize && self.array[self.index] != "" {
+            result.push(String::from(&self.array[self.index]));
+            self.index += 1;
+        }
+
+        result
+    }
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
