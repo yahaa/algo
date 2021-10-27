@@ -608,6 +608,7 @@ impl Solution {
     }
 
     // 513. Find Bottom Left Tree Value
+    // add unit test for this
     pub fn find_bottom_left_value(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
         if root.is_none() {
             return 0;
@@ -705,14 +706,14 @@ impl Solution {
 }
 #[cfg(test)]
 mod test {
+    use super::Solution;
+    use super::TreeNode;
+    use std::cell::RefCell;
+    use std::rc::Rc;
+
     #[test]
     // test average_of_levels
     fn test_average_of_levels() {
-        use super::Solution;
-        use super::TreeNode;
-        use std::cell::RefCell;
-        use std::rc::Rc;
-
         let root = Some(Rc::new(RefCell::new(TreeNode {
             val: 3,
             left: Some(Rc::new(RefCell::new(TreeNode {
@@ -738,5 +739,96 @@ mod test {
         let res = vec![3.0, 14.5, 11.0];
 
         assert_eq!(Solution::average_of_levels(root), res);
+    }
+    #[test]
+    // test right_side_view
+    fn right_side_view() {
+        let root = Some(Rc::new(RefCell::new(TreeNode {
+            val: 1,
+            left: Some(Rc::new(RefCell::new(TreeNode {
+                val: 2,
+                left: None,
+                right: None,
+            }))),
+            right: Some(Rc::new(RefCell::new(TreeNode {
+                val: 3,
+                left: None,
+                right: None,
+            }))),
+        })));
+
+        let res = vec![1, 3];
+
+        assert_eq!(Solution::right_side_view(root), res);
+    }
+
+    #[test]
+    // test merge_trees
+    fn merge_trees() {
+        let t1 = Some(Rc::new(RefCell::new(TreeNode {
+            val: 1,
+            left: Some(Rc::new(RefCell::new(TreeNode {
+                val: 3,
+                left: None,
+                right: None,
+            }))),
+            right: Some(Rc::new(RefCell::new(TreeNode {
+                val: 2,
+                left: None,
+                right: None,
+            }))),
+        })));
+
+        let t2 = Some(Rc::new(RefCell::new(TreeNode {
+            val: 2,
+            left: Some(Rc::new(RefCell::new(TreeNode {
+                val: 1,
+                left: None,
+                right: None,
+            }))),
+            right: Some(Rc::new(RefCell::new(TreeNode {
+                val: 3,
+                left: None,
+                right: None,
+            }))),
+        })));
+
+        let res = Some(Rc::new(RefCell::new(TreeNode {
+            val: 3,
+            left: Some(Rc::new(RefCell::new(TreeNode {
+                val: 4,
+                left: None,
+                right: None,
+            }))),
+            right: Some(Rc::new(RefCell::new(TreeNode {
+                val: 5,
+                left: None,
+                right: None,
+            }))),
+        })));
+
+        assert_eq!(Solution::merge_trees(t1, t2), res);
+    }
+
+    #[test]
+    // test sum_root_to_leaf
+    fn sum_root_to_leaf() {
+        let root = Some(Rc::new(RefCell::new(TreeNode {
+            val: 1,
+            left: Some(Rc::new(RefCell::new(TreeNode {
+                val: 0,
+                left: None,
+                right: None,
+            }))),
+            right: Some(Rc::new(RefCell::new(TreeNode {
+                val: 1,
+                left: None,
+                right: None,
+            }))),
+        })));
+
+        let res = 5;
+
+        assert_eq!(Solution::sum_root_to_leaf(root), res);
     }
 }
