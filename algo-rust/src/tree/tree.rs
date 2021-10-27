@@ -662,7 +662,7 @@ impl Solution {
         dfs(root, 0)
     }
 
-    // 687. Longest Univalue Path todo
+    // Longest Univalue Path in a Binary Tree
     pub fn longest_univalue_path(_root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
         unimplemented!()
     }
@@ -701,5 +701,42 @@ impl Solution {
         }
 
         res
+    }
+}
+#[cfg(test)]
+mod test {
+    #[test]
+    // test average_of_levels
+    fn test_average_of_levels() {
+        use super::Solution;
+        use super::TreeNode;
+        use std::cell::RefCell;
+        use std::rc::Rc;
+
+        let root = Some(Rc::new(RefCell::new(TreeNode {
+            val: 3,
+            left: Some(Rc::new(RefCell::new(TreeNode {
+                val: 9,
+                left: None,
+                right: None,
+            }))),
+            right: Some(Rc::new(RefCell::new(TreeNode {
+                val: 20,
+                left: Some(Rc::new(RefCell::new(TreeNode {
+                    val: 15,
+                    left: None,
+                    right: None,
+                }))),
+                right: Some(Rc::new(RefCell::new(TreeNode {
+                    val: 7,
+                    left: None,
+                    right: None,
+                }))),
+            }))),
+        })));
+
+        let res = vec![3.0, 14.5, 11.0];
+
+        assert_eq!(Solution::average_of_levels(root), res);
     }
 }
