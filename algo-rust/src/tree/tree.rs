@@ -666,4 +666,40 @@ impl Solution {
     pub fn longest_univalue_path(_root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
         unimplemented!()
     }
+
+    // leetcode 637. Average of Levels in Binary Tree
+    // average of levels
+    pub fn average_of_levels(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<f64> {
+        let mut res = Vec::new();
+        let mut queue = VecDeque::new();
+
+        if root.is_none() {
+            return res;
+        }
+
+        queue.push_back(root.unwrap().clone());
+
+        while queue.len() > 0 {
+            let size = queue.len();
+            let mut sum = 0.0;
+
+            for _ in 0..size {
+                if let Some(top) = queue.pop_front() {
+                    sum += top.borrow().val as f64;
+
+                    if top.borrow().left.is_some() {
+                        queue.push_back(top.borrow().left.clone().unwrap());
+                    }
+
+                    if top.borrow().right.is_some() {
+                        queue.push_back(top.borrow().right.clone().unwrap());
+                    }
+                }
+            }
+
+            res.push(sum / size as f64);
+        }
+
+        res
+    }
 }
