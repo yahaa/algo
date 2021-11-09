@@ -26,11 +26,7 @@ impl Solution {
 
     // Longest Consecutive Sequence
     pub fn longest_consecutive(nums: Vec<i32>) -> i32 {
-        if nums.len() == 0 {
-            return 0;
-        }
-
-        let (mut map, mut ans) = (HashMap::new(), 1);
+        let (mut map, mut ans) = (HashMap::new(), 0);
 
         for n in nums {
             if map.contains_key(&n) {
@@ -42,18 +38,12 @@ impl Solution {
             let (mut left, mut right, mut length) = (n, n, 1);
             if let Some(v) = map.get(&(n - 1)) {
                 left = n - v;
-                length += match map.get(&left) {
-                    Some(vl) => *vl,
-                    None => 0,
-                };
+                length += map.get(&left).cloned().unwrap_or(0);
             };
 
             if let Some(v) = map.get(&(n + 1)) {
                 right = n + v;
-                length += match map.get(&right) {
-                    Some(vr) => *vr,
-                    None => 0,
-                };
+                length += map.get(&right).cloned().unwrap_or(0);
             }
 
             map.insert(left, length);
