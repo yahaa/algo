@@ -1,6 +1,45 @@
 #![allow(dead_code)]
 use std::collections::HashMap;
 
+struct FindSumPairs {
+    nums1: Vec<i32>,
+    nums2: Vec<i32>,
+    map: HashMap<i32, i32>,
+}
+
+/**
+ * `&self` means the method takes an immutable reference.
+ * If you need a mutable reference, change it to `&mut self` instead.
+ */
+impl FindSumPairs {
+    fn new(nums1: Vec<i32>, nums2: Vec<i32>) -> Self {
+        let mut map = HashMap::new();
+
+        for num in nums2.iter() {
+            *map.entry(*num).or_insert(0) += 1;
+        }
+
+        FindSumPairs { nums1, nums2, map }
+    }
+
+    fn add(&mut self, index: i32, val: i32) {
+        *self.map.entry(self.nums2[index as usize]).or_insert(1) -= 1;
+        self.nums2[index as usize] += val;
+        *self.map.entry(self.nums2[index as usize]).or_insert(0) += 1;
+    }
+
+    fn count(&self, tot: i32) -> i32 {
+        let mut res = 0;
+
+        for a in self.nums1.iter() {
+            if let Some(v) = self.map.get(&(tot - a)) {
+                res += v;
+            }
+        }
+        res
+    }
+}
+
 struct Solution {}
 
 impl Solution {
