@@ -7,10 +7,6 @@ struct FindSumPairs {
     map: HashMap<i32, i32>,
 }
 
-/**
- * `&self` means the method takes an immutable reference.
- * If you need a mutable reference, change it to `&mut self` instead.
- */
 impl FindSumPairs {
     fn new(nums1: Vec<i32>, nums2: Vec<i32>) -> Self {
         let mut map = HashMap::new();
