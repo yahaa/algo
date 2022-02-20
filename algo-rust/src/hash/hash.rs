@@ -52,6 +52,24 @@ impl Solution {
         }
         ans
     }
+
+    // Count Number of Pairs With Absolute Difference K
+    pub fn count_k_difference(nums: Vec<i32>, k: i32) -> i32 {
+        let (mut res, mut map) = (0, HashMap::new());
+        for num in nums {
+            if let Some(v) = map.get(&(num - k)) {
+                res += v;
+            }
+
+            if let Some(v) = map.get(&(num + k)) {
+                res += v;
+            }
+
+            *map.entry(num).or_insert(0) += 1;
+        }
+
+        res
+    }
 }
 
 #[cfg(test)]
