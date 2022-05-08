@@ -5,6 +5,26 @@ use std::cmp::{max, min};
 struct Solution {}
 
 impl Solution {
+    // 32. Longest Valid Parentheses
+    pub fn longest_valid_parentheses(s: String) -> i32 {
+        let (mut stack, mut ans) = (Vec::new(), 0);
+        stack.push(-1);
+
+        for (i, c) in s.chars().enumerate() {
+            if c == '(' {
+                stack.push(i as i32);
+            } else {
+                stack.pop();
+
+                if stack.is_empty() {
+                    stack.push(i as i32);
+                } else {
+                    ans = max(ans, i as i32 - stack.last().unwrap());
+                }
+            }
+        }
+        ans
+    }
     // leetcode 921
     pub fn min_add_to_make_valid(s: String) -> i32 {
         let (mut stack, mut iter) = (Vec::new(), s.chars());
@@ -348,5 +368,13 @@ mod test {
         let t = vec![55, 38, 53, 81, 61, 93, 97, 32, 43, 78];
         let res = vec![3, 1, 1, 2, 1, 1, 0, 1, 1, 0];
         assert_eq!(res, Solution::daily_temperatures(t));
+    }
+
+    #[test]
+    fn longest_valid_parentheses() {
+        assert_eq!(2, Solution::longest_valid_parentheses("(()".to_string()));
+        assert_eq!(4, Solution::longest_valid_parentheses("()()".to_string()));
+        assert_eq!(6, Solution::longest_valid_parentheses("()(())".to_string()));
+        assert_eq!(8, Solution::longest_valid_parentheses("()(())()".to_string()));
     }
 }
