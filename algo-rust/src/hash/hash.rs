@@ -39,6 +39,30 @@ impl FindSumPairs {
 struct Solution {}
 
 impl Solution {
+    // leetcode 2325
+    pub fn decode_message(key: String, message: String) -> String {
+        let mut map = HashMap::new();
+        let mut index: u8 = 97;
+        for c in key.chars() {
+            if !c.is_alphabetic() || map.get(&c).is_some() {
+                continue;
+            }
+
+            map.insert(c, index as char);
+            index += 1;
+        }
+
+        let mut result = String::new();
+        for c in message.chars() {
+            if c.is_alphabetic() && map.contains_key(&c) {
+                result.push(map[&c]);
+            } else {
+                result.push(c);
+            }
+        }
+
+        result
+    }
     // leetcode 1282
     pub fn group_the_people(group_sizes: Vec<i32>) -> Vec<Vec<i32>> {
         let mut result = Vec::new();
