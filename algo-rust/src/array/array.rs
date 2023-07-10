@@ -8,6 +8,24 @@ use std::{
 struct Solution {}
 
 #[derive(Copy, Clone, Eq, PartialEq, Ord, Debug)]
+struct ValIndex {
+    pub v: i32,
+    pub index: usize,
+}
+
+impl ValIndex {
+    pub fn new(v: i32, index: usize) -> Self {
+        ValIndex { v, index }
+    }
+}
+
+impl PartialOrd for ValIndex {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        other.v.partial_cmp(&self.v)
+    }
+}
+
+#[derive(Copy, Clone, Eq, PartialEq, Ord, Debug)]
 struct Val {
     pub v: i32,
     pub index: (i32, i32),
@@ -21,11 +39,35 @@ impl Val {
 
 impl PartialOrd for Val {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        other.v.partial_cmp(&self.v)
+        self.v.partial_cmp(&other.v)
     }
 }
 
 impl Solution {
+    // leetcode 1
+    pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
+        let mut array = Vec::new();
+        for (index, num) in nums.iter().enumerate() {
+            array.push(ValIndex::new(*num, index));
+        }
+
+        array.sort();
+
+        let mut result = Vec::new();
+        for item in array.iter() {
+            let r = target - item.v;
+            if let Ok(index) = array.binary_search_by(|t| t.v.cmp(&r)) {
+                if array[index].index == item.index {
+                    continue;
+                }
+                result.push(item.index as i32);
+                result.push(array[index].index as i32);
+                break;
+            }
+        }
+
+        result
+    }
     // leetcode 1920
     pub fn build_array(nums: Vec<i32>) -> Vec<i32> {
         nums.iter().map(|n| nums[*n as usize]).collect()
