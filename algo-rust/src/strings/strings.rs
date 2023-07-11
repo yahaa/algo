@@ -135,6 +135,35 @@ impl Solution {
 
         ans as i32
     }
+
+    // leetcode  20
+    pub fn is_valid(s: String) -> bool {
+        let mut stack = Vec::new();
+
+        for c in s.chars() {
+            match c {
+                '(' | '[' | '{' => stack.push(c),
+                ')' | ']' | '}' => {
+                    if let Some(b) = stack.last() {
+                        if b == &'(' && c == ')' {
+                            stack.pop();
+                        } else if b == &'[' && c == ']' {
+                            stack.pop();
+                        } else if b == &'{' && c == '}' {
+                            stack.pop();
+                        } else {
+                            stack.push(c);
+                        }
+                    } else {
+                        stack.push(c);
+                    }
+                }
+                _ => {}
+            }
+        }
+
+        stack.len() == 0
+    }
 }
 
 #[cfg(test)]
