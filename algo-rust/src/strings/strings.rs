@@ -114,10 +114,10 @@ impl Solution {
 
     // leetcode 3
     pub fn length_of_longest_substring(s: String) -> i32 {
-        let (mut i, mut j) = (0, 0);
+        let (mut i, mut j, mut ans) = (0, 0, 0);
+
         let mut map = HashMap::new();
         let chars: Vec<char> = s.chars().collect();
-        let mut ans = 0;
 
         while i <= j && j < s.len() {
             if !map.contains_key(&chars[j]) {
