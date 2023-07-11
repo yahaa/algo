@@ -50,7 +50,7 @@ impl Solution {
         let mut max_pro = 0;
         for pri in prices.iter() {
             if pri < &min_pri {
-                min_pri = *pri
+                min_pri = *pri;
             }
 
             if pri - min_pri > max_pro {
