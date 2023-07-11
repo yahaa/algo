@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 #![allow(unused_macros)]
 
-use std::{collections::HashMap};
+use std::collections::HashMap;
 
 macro_rules! map(
     { $($key:expr => $value:expr),+ } => {
@@ -111,11 +111,40 @@ impl Solution {
         });
         result
     }
+
+    // leetcode 3
+    pub fn length_of_longest_substring(s: String) -> i32 {
+        let (mut i, mut j) = (0, 0);
+        let mut map = HashMap::new();
+        let chars: Vec<char> = s.chars().collect();
+        let mut ans = 0;
+
+        while i <= j && j < s.len() {
+            if !map.contains_key(&chars[j]) {
+                map.insert(chars[j], 1);
+                j += 1;
+            } else {
+                map.remove(&chars[i]);
+                i += 1;
+            }
+
+            if j - i > ans {
+                ans = j - i;
+            }
+        }
+
+        ans as i32
+    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
+
+    #[test]
+    fn length_of_longest_substring() {
+        assert_eq!(3, Solution::length_of_longest_substring("abc".to_string()));
+    }
 
     #[test]
     fn min_steps() {
