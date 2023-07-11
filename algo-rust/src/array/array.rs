@@ -44,6 +44,21 @@ impl PartialOrd for Val {
 }
 
 impl Solution {
+    // leetcode 121
+    pub fn max_profit(prices: Vec<i32>) -> i32 {
+        let mut min_pri = prices[0];
+        let mut max_pro = 0;
+        for pri in prices.iter() {
+            if pri < &min_pri {
+                min_pri = *pri
+            }
+
+            if pri - min_pri > max_pro {
+                max_pro = pri - min_pri;
+            }
+        }
+        max_pro
+    }
     // leetcode 1
     pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
         let mut array = Vec::new();
