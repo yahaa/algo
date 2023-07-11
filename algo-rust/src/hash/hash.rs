@@ -39,6 +39,19 @@ impl FindSumPairs {
 struct Solution {}
 
 impl Solution {
+    // leetcode 217
+    pub fn contains_duplicate(nums: Vec<i32>) -> bool {
+        let mut map = HashMap::new();
+        for n in nums {
+            if map.contains_key(&n) {
+                return true;
+            }
+
+            map.insert(n, 1);
+        }
+
+        false
+    }
     // leetcode 2325
     pub fn decode_message(key: String, message: String) -> String {
         let mut map = HashMap::new();
