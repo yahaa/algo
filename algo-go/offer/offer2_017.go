@@ -1,5 +1,7 @@
 package offer
 
+import "math"
+
 func minWindow(s string, t string) string {
 	minLen := math.MaxInt32
 	var left, right int

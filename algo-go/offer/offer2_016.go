@@ -1,7 +1,5 @@
 package offer
 
-import "math"
-
 func lengthOfLongestSubstring_2(s string) int {
 	i, j, ans, count := 0, 0, 0, make(map[byte]int)
 
