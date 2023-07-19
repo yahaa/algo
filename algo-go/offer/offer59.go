@@ -1,6 +1,9 @@
 package offer
 
-import "container/list"
+import (
+	"container/heap"
+	"container/list"
+)
 
 // MaxQueue 队列最大值
 type MaxQueue struct {
@@ -52,4 +55,49 @@ func (q *MaxQueue) PopFront() int {
 	}
 
 	return f.Value.(int)
+}
+
+type IntHeap []int
+
+func (h IntHeap) Len() int           { return len(h) }
+func (h IntHeap) Less(i, j int) bool { return h[i] > h[j] }
+func (h IntHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+
+func (h *IntHeap) Push(x any) {
+	*h = append(*h, x.(int))
+}
+
+func (h *IntHeap) Pop() any {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[0 : n-1]
+	return x
+}
+
+func maxSlidingWindow(nums []int, k int) []int {
+	dqueue := list.New()
+	res := make([]int, 0)
+
+	for i := 0; i < k; i++ {
+		for dqueue.Len() > 0 && dqueue.Back().Value.(int) < nums[i] {
+			dqueue.Remove(dqueue.Back())
+		}
+		dqueue.PushBack(nums[i])
+	}
+
+	res = append(res, dqueue.Front().Value.(int))
+	for i := k; i < len(nums); i++ {
+		if nums[i-k] == dqueue.Front().Value.(int) {
+			dqueue.Remove(dqueue.Front())
+		}
+
+		for dqueue.Len() > 0 && dqueue.Back().Value.(int) < nums[i] {
+			dqueue.Remove(dqueue.Back())
+		}
+
+		dqueue.PushBack(nums[i])
+		res = append(res, dqueue.Front().Value.(int))
+	}
+	return res
 }
