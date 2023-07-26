@@ -12,6 +12,40 @@ import (
  *     Right *TreeNode
  * }
  */
+func levelOrder5(root *TreeNode) []int {
+	res := make([]int, 0)
+
+	if root == nil {
+		return res
+	}
+
+	que := list.New()
+
+	que.PushBack(root)
+
+	for que.Len() > 0 {
+		count := que.Len()
+		for count > 0 {
+			t := que.Front().Value.(*TreeNode)
+			que.Remove(que.Front())
+
+			res = append(res, t.Val)
+
+			if t.Left != nil {
+				que.PushBack(t.Left)
+			}
+
+			if t.Right != nil {
+				que.PushBack(t.Right)
+			}
+
+			count--
+		}
+	}
+
+	return res
+}
+
 func levelOrder(root *TreeNode) []int {
 	res := make([]int, 0)
 	if root == nil {
