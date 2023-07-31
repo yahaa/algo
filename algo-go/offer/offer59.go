@@ -1,7 +1,6 @@
 package offer
 
 import (
-	"container/heap"
 	"container/list"
 )
 
