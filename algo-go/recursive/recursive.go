@@ -190,6 +190,34 @@ func SubsetsWithDup(nums []int) [][]int {
 	return res
 }
 
+// leetcode 90
+func subsetsWithDup(nums []int) [][]int {
+	ans := make([][]int, 0)
+	sort.Ints(nums)
+
+	var dfs func(cur []int, start int)
+
+	dfs = func(cur []int, start int) {
+		tmp := make([]int, len(cur))
+		copy(tmp, cur)
+		ans = append(ans, tmp)
+
+		for i := start; i < len(nums); i++ {
+			if i > start && nums[i] == nums[i-1] {
+				continue
+			}
+
+			cur = append(cur, nums[i])
+			dfs(cur, i+1)
+			cur = cur[:len(cur)-1]
+		}
+	}
+
+	dfs([]int{}, 0)
+
+	return ans
+}
+
 // LetterCombinations 字母组合
 func LetterCombinations(digits string) []string {
 	var (
