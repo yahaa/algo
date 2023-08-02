@@ -4,6 +4,36 @@ import (
 	"sort"
 )
 
+type Pairs struct {
+	index int
+	value int
+}
+
+func twoSum(nums []int, target int) []int {
+	pairs := make([]Pairs, len(nums))
+	for i := 0; i < len(nums); i++ {
+		pairs[i] = Pairs{i, nums[i]}
+	}
+
+	sort.Slice(pairs, func(i, j int) bool {
+		return pairs[i].value < pairs[j].value
+	})
+
+	for i := 0; i < len(pairs); i++ {
+		tmp := target - pairs[i].value
+
+		k := sort.Search(len(pairs), func(j int) bool {
+			return pairs[j].value >= tmp
+		})
+
+		if k < len(pairs) && pairs[k].value == tmp && pairs[k].index != pairs[i].index {
+			return []int{pairs[i].index, pairs[k].index}
+		}
+	}
+
+	return []int{}
+}
+
 // SortArrayByParityII leetcode 922
 func SortArrayByParityII(A []int) []int {
 	n := len(A)
