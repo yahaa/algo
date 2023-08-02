@@ -510,6 +510,39 @@ func rangeSumBST(root *TreeNode, low int, high int) int {
 	return root.Val + rangeSumBST(root.Left, low, high) + rangeSumBST(root.Right, low, high)
 }
 
+func combinationSum(candidates []int, target int) [][]int {
+	sort.Ints(candidates)
+	ans := make([][]int, 0)
+	var dfs func(candidates []int, cur []int, target, index int)
+
+	dfs = func(candidates []int, cur []int, target, index int) {
+		if target < 0 {
+			return
+		}
+
+		if target == 0 {
+			tmp := make([]int, len(cur))
+			copy(tmp, cur)
+			ans = append(ans, tmp)
+			return
+		}
+
+		for i := index; i < len(candidates); i++ {
+			if target < candidates[i] {
+				break
+			}
+
+			cur = append(cur, candidates[i])
+			dfs(candidates, cur, target-candidates[i], i)
+			cur = cur[:len(cur)-1]
+		}
+	}
+
+	dfs(candidates, []int{}, target, 0)
+
+	return ans
+}
+
 func combinationSum2(candidates []int, target int) [][]int {
 	// 1. 排序 [1,1,2,5,6,7,10]
 	// 2. 递归回溯
