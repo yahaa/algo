@@ -1,5 +1,59 @@
 package offer
 
+func reversePairs2(nums []int) int {
+	return mergeSort2(nums, 0, len(nums)-1)
+}
+
+func mergeSort2(nums []int, left, right int) int {
+	if left >= right {
+		return 0
+	}
+
+	mid := (left + right) / 2
+
+	count := mergeSort2(nums, left, mid)    // left --> mid 已经排好序了
+	count += mergeSort2(nums, mid+1, right) // mid+1 --> right 已经排好序了
+
+	// do merge 合并两个有序数组
+
+	i, j, k := left, mid+1, 0
+
+	tmp := make([]int, right-left+1)
+
+	for i <= mid && j <= right {
+		if nums[i] <= nums[j] {
+			tmp[k] = nums[i]
+			i++
+		} else {
+			tmp[k] = nums[j]
+			j++
+			count += mid - i + 1
+		}
+
+		k++
+	}
+
+	for i <= mid {
+		tmp[k] = nums[i]
+		i++
+		k++
+	}
+
+	for j <= right {
+		tmp[k] = nums[j]
+		j++
+		k++
+	}
+
+	k = 0
+	for left <= right {
+		nums[left] = tmp[k]
+		left++
+		k++
+	}
+	return count
+}
+
 func reversePairs(nums []int) int {
 	tmp := make([]int, len(nums))
 	return mergeSort(nums, tmp, 0, len(nums)-1)
