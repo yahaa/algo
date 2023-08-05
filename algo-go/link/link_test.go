@@ -5,6 +5,23 @@ import (
 	"testing"
 )
 
+func Test_reverseList(t *testing.T) {
+	head := &ListNode{
+		Val: 1,
+		Next: &ListNode{
+			Val:  5,
+			Next: &ListNode{Val: 6},
+		},
+	}
+
+	n := reverseList(head)
+
+	for n != nil {
+		t.Logf("%v -> ", n.Val)
+		n = n.Next
+	}
+}
+
 func Test_orderInsert(t *testing.T) {
 
 	tests := []struct {

@@ -443,3 +443,16 @@ func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
 
 	return head.Next
 }
+
+func reverseList(head *ListNode) *ListNode {
+	if head == nil || head.Next == nil {
+		return head
+	}
+
+	res := reverseList(head.Next)
+
+	head.Next.Next = head
+	head.Next = nil
+
+	return res
+}
