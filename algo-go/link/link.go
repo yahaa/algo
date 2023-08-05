@@ -27,6 +27,18 @@ func MiddleNode(head *ListNode) *ListNode {
 	return res
 }
 
+// leetcode 876
+func middleNode(head *ListNode) *ListNode {
+	slow, fast := head, head
+
+	for fast != nil && fast.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+	}
+
+	return slow
+}
+
 // Node xxx
 type Node struct {
 	Val    int
@@ -204,6 +216,7 @@ func sortedListToBST(head *ListNode) *TreeNode {
 	}
 }
 
+// leetcode 141
 func hasCycle(head *ListNode) bool {
 	if head == nil {
 		return false
@@ -223,6 +236,7 @@ func hasCycle(head *ListNode) bool {
 	return false
 }
 
+// leetcode  142 环形连标二
 func detectCycle(head *ListNode) *ListNode {
 	if head == nil {
 		return nil
@@ -252,6 +266,7 @@ func detectCycle(head *ListNode) *ListNode {
 	return head
 }
 
+// leetcode 143
 func reorderList(head *ListNode) {
 	if head == nil || head.Next == nil {
 		return
@@ -444,6 +459,7 @@ func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
 	return head.Next
 }
 
+// 	// 1 5 6
 func reverseList(head *ListNode) *ListNode {
 	if head == nil || head.Next == nil {
 		return head
