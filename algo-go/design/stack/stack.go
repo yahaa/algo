@@ -1,5 +1,9 @@
 package stack
 
+import (
+	"container/list"
+)
+
 type node struct {
 	value int
 	next  *node
@@ -84,3 +88,70 @@ func (m *MinStack) GetMin() int {
 
 	return n.value
 }
+
+type MinStack2 struct {
+	dataStack *list.List
+	minStack  *list.List
+}
+
+func Constructor2() MinStack2 {
+	return MinStack2{
+		dataStack: list.New(),
+		minStack:  list.New(),
+	}
+
+}
+
+func (s *MinStack2) Push(val int) {
+	s.dataStack.PushBack(val)
+	if s.minStack.Len() == 0 {
+		s.minStack.PushBack(val)
+		return
+	}
+
+	m := s.minStack.Back().Value.(int)
+
+	if val <= m {
+		s.minStack.PushBack(val)
+	}
+}
+
+func (s *MinStack2) Pop() {
+	m := s.dataStack.Back()
+	if m == nil {
+		return
+	}
+
+	s.dataStack.Remove(m)
+
+	if m.Value.(int) == s.minStack.Back().Value.(int) {
+		s.minStack.Remove(s.minStack.Back())
+	}
+}
+
+func (s *MinStack2) Top() int {
+	m := s.dataStack.Back()
+	if m == nil {
+		return 0
+	}
+
+	return m.Value.(int)
+}
+
+func (s *MinStack2) GetMin() int {
+	m := s.minStack.Back()
+	if m == nil {
+		return 0
+	}
+
+	return m.Value.(int)
+}
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * obj := Constructor();
+ * obj.Push(val);
+ * obj.Pop();
+ * param_3 := obj.Top();
+ * param_4 := obj.GetMin();
+ */
