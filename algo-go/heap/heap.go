@@ -331,3 +331,54 @@ func getSmallEqualNum(matrix [][]int, target int) int {
 	}
 	return count
 }
+
+type ListNode struct {
+	Val  int
+	Next *ListNode
+}
+
+type minHeapNode []*ListNode
+
+func (h minHeapNode) Len() int           { return len(h) }
+func (h minHeapNode) Less(i, j int) bool { return h[i].Val < h[j].Val }
+func (h minHeapNode) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+
+func (h *minHeapNode) Push(v any) {
+	*h = append(*h, v.(*ListNode))
+}
+
+func (h *minHeapNode) Pop() any {
+	old := *h
+	n := len(old)
+	res := old[n-1]
+	old = old[:n-1]
+
+	*h = old
+	return res
+}
+
+func mergeKLists(lists []*ListNode) *ListNode {
+	head := &ListNode{}
+	p := head
+
+	h := &minHeapNode{}
+	heap.Init(h)
+
+	for i := 0; i < len(lists); i++ {
+		if lists[i] != nil {
+			heap.Push(h, lists[i])
+		}
+	}
+
+	for h.Len() > 0 {
+		tmp := heap.Pop(h).(*ListNode)
+		p.Next = tmp
+		p = p.Next
+
+		if tmp.Next != nil {
+			heap.Push(h, tmp.Next)
+		}
+	}
+
+	return head.Next
+}
