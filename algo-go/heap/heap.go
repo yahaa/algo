@@ -382,3 +382,19 @@ func mergeKLists(lists []*ListNode) *ListNode {
 
 	return head.Next
 }
+
+// findKthLargest2 leetcode 215 找到数组中第 k 大的数字
+func findKthLargest2(nums []int, k int) int {
+	h := &minHeap{}
+	heap.Init(h)
+
+	for i := 0; i < len(nums); i++ {
+		heap.Push(h, nums[i])
+
+		if h.Len() > k {
+			heap.Pop(h)
+		}
+	}
+
+	return (*h)[0]
+}
