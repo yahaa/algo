@@ -398,3 +398,52 @@ func findKthLargest2(nums []int, k int) int {
 
 	return (*h)[0]
 }
+
+type item struct {
+	val  int
+	freq int
+}
+
+type minHeapItem []item
+
+func (h minHeapItem) Len() int           { return len(h) }
+func (h minHeapItem) Less(i, j int) bool { return h[i].freq < h[j].freq }
+func (h minHeapItem) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+func (h *minHeapItem) Push(v any) {
+	*h = append(*h, v.(item))
+}
+func (h *minHeapItem) Pop() any {
+	old := *h
+	n := len(old)
+	res := old[n-1]
+	old = old[:n-1]
+	*h = old
+
+	return res
+}
+
+func topKFrequent2(nums []int, k int) []int {
+	hashMap := make(map[int]int)
+
+	for _, num := range nums {
+		hashMap[num]++
+	}
+
+	h := &minHeapItem{}
+	heap.Init(h)
+	for val, freq := range hashMap {
+		heap.Push(h, item{val, freq})
+
+		if h.Len() > k {
+			heap.Pop(h)
+		}
+	}
+
+	res := make([]int, 0)
+	for h.Len() > 0 {
+		tmp := heap.Pop(h).(item)
+		res = append(res, tmp.val)
+	}
+
+	return res
+}
