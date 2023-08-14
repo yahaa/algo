@@ -108,3 +108,60 @@ func mergeSort(a, tmp []int, left, right int) int {
 
 	return count
 }
+
+// leetcode 912 归并排序实现数组排序
+func sortArray(nums []int) []int {
+	if len(nums) == 0 {
+		return nums
+	}
+
+	mergeSort912(nums, 0, len(nums)-1)
+
+	return nums
+}
+
+//
+func mergeSort912(nums []int, left, right int) {
+	if left >= right {
+		return
+	}
+
+	mid := (left + right) / 2
+
+	mergeSort912(nums, left, mid)    // left --> mid 已经排好序
+	mergeSort912(nums, mid+1, right) // mid+1 --> right 已经排好序
+
+	tmp := make([]int, right-left+1)
+	i, j, k := left, mid+1, 0
+
+	for i <= mid && j <= right {
+		if nums[i] < nums[j] {
+			tmp[k] = nums[i]
+			i++
+		} else {
+			tmp[k] = nums[j]
+			j++
+		}
+
+		k++
+	}
+
+	for i <= mid {
+		tmp[k] = nums[i]
+		i++
+		k++
+	}
+
+	for j <= right {
+		tmp[k] = nums[j]
+		j++
+		k++
+	}
+
+	k = 0
+
+	for i := left; i <= right; i++ {
+		nums[i] = tmp[k]
+		k++
+	}
+}
