@@ -447,3 +447,51 @@ func topKFrequent2(nums []int, k int) []int {
 
 	return res
 }
+
+// rearrangeBarcodes leetcode 1054 重排条形码，使得任意相邻条形码不相同
+func rearrangeBarcodes(barcodes []int) []int {
+	hashMap := make(map[int]int)
+
+	for _, num := range barcodes {
+		hashMap[num]++
+	}
+
+	h := &minHeap{}
+	heap.Init(h)
+	for val, freq := range hashMap {
+		heap.Push(h, item{val, freq})
+	}
+
+	res := make([]int, 0)
+	for h.Len() > 0 {
+		t1 := heap.Pop(h).(item)
+
+		if len(res) == 0 || res[len(res)-1] != t1.val {
+			res = append(res, t1.val)
+
+			t1.freq--
+
+			if t1.freq > 0 {
+				heap.Push(h, t1)
+			}
+
+			continue
+		}
+
+		if res[len(res)-1] == t1.val && h.Len() > 0 {
+			t2 := heap.Pop(h).(item)
+
+			heap.Push(h, t1)
+
+			res = append(res, t2.val)
+
+			t2.freq--
+
+			if t2.freq > 0 {
+				heap.Push(h, t2)
+			}
+		}
+	}
+
+	return res
+}
