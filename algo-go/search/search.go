@@ -25,31 +25,25 @@ func search(nums []int, target int) int {
 
 // leetcode 704 二分查找递归实现
 func search2(nums []int, target int) int {
-	var dfs func(l, r int)
-	ans := -1
-	dfs = func(l, r int) {
+	var dfs func(l, r int) int
+	dfs = func(l, r int) int {
 		if l >= r {
-			return
+			return -1
 		}
 
 		m := l + (r-l)/2
 		if nums[m] == target {
-			ans = m
-			return
+			return m
 		}
 
 		if nums[m] < target {
-			l = m + 1
-		} else {
-			r = m
+			return dfs(m+1, r)
 		}
 
-		dfs(l, r)
+		return dfs(l, m)
 	}
 
-	dfs(0, len(nums))
-
-	return ans
+	return dfs(0, len(nums))
 }
 
 func min(a, b int) int {
