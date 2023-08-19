@@ -53,6 +53,7 @@ func min(a, b int) int {
 	return b
 }
 
+// minSubArrayLen leetcode 209 最长子数组滑动窗口实现
 func minSubArrayLen(target int, nums []int) int {
 	l, r, tmp, ans := 0, 0, 0, math.MaxInt64
 	for r < len(nums) {
@@ -70,4 +71,40 @@ func minSubArrayLen(target int, nums []int) int {
 	}
 
 	return ans
+}
+
+// searchRange leetcode 34 在有序数组中查找 target 出现的第一次和最后一次
+func searchRange(nums []int, target int) []int {
+	l, r := 0, len(nums)
+
+	ans := -1
+	for l < r {
+		m := l + (r-l)/2
+		if nums[m] == target {
+			ans = m
+			break
+		}
+
+		if nums[m] > target {
+			r = m
+		} else {
+			l = m + 1
+		}
+	}
+
+	if ans == -1 {
+		return []int{-1, -1}
+	}
+
+	l = ans
+	for l-1 >= 0 && nums[l-1] == target {
+		l--
+	}
+
+	r = ans
+	for r < len(nums)-1 && nums[r+1] == target {
+		r++
+	}
+
+	return []int{l, r}
 }
