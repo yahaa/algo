@@ -472,3 +472,26 @@ func reverseList(head *ListNode) *ListNode {
 
 	return res
 }
+
+// getIntersectionNode2 offer 52 求两个链表的第一个相交节点
+func getIntersectionNode2(headA, headB *ListNode) *ListNode {
+	counter := make(map[*ListNode]int)
+
+	cur := headA
+	for cur != nil {
+		counter[cur]++
+		cur = cur.Next
+	}
+
+	cur = headB
+
+	for cur != nil {
+		if c := counter[cur]; c > 0 {
+			return cur
+		}
+
+		cur = cur.Next
+	}
+
+	return nil
+}
