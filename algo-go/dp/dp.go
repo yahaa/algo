@@ -55,6 +55,32 @@ func maxSubArray2(nums []int) int {
 	return ans
 }
 
+// lengthOfLIS leetcode 300 最长上升子序列
+func lengthOfLIS(nums []int) int {
+	// 定义 dp[i] 为 以 nums[i] 结尾的最长上升子序列
+	// dp[i]=max(dp[0].j.dp[i-1]) + 1 (当 nums[j] < nums[i])
+	// dp[0]=1
+
+	dp := make([]int, len(nums))
+
+	dp[0] = 1
+
+	ans := dp[0]
+
+	for i := 1; i < len(nums); i++ {
+		dp[i] = 1
+		for j := 0; j < i; j++ {
+			if nums[i] > nums[j] {
+				dp[i] = max(dp[j]+1, dp[i])
+			}
+		}
+
+		ans = max(ans, dp[i])
+	}
+
+	return ans
+}
+
 func max(a, b int) int {
 	if a > b {
 		return a
