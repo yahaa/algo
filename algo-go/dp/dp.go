@@ -1,8 +1,57 @@
 package dp
 
+import (
+	"fmt"
+	"sort"
+	"strconv"
+)
+
+func findMaxValue(nums []int, n int) int {
+	sort.Slice(nums, func(i, j int) bool {
+		return nums[i] > nums[j]
+	})
+
+	fmt.Printf("%v\n", nums)
+
+	s := fmt.Sprintf("%v", n)
+	tmp := make([]int, 0)
+
+	for i := 0; i < len(s); i++ {
+		t, _ := strconv.Atoi(s[i : i+1])
+		for j := 0; j < len(nums); j++ {
+			if nums[j] == t {
+				tmp = append(tmp, nums[j])
+				break
+			} else if nums[j] < t {
+				tmp = append(tmp, nums[j])
+				break
+			}
+		}
+	}
+
+	fmt.Printf("%v\n", tmp)
+
+	if len(tmp) != len(s) {
+		tmp = make([]int, 0)
+
+		for i := 0; i < len(s)-1; i++ {
+			tmp = append(tmp, nums[0])
+		}
+	}
+
+	var ans string
+
+	for i := 0; i < len(tmp); i++ {
+		ans += fmt.Sprintf("%v", tmp[i])
+	}
+
+	v, _ := strconv.Atoi(ans)
+	return v
+}
+
 // maxSubArray leetcode 53 最大子数组的和
 func maxSubArray(nums []int) int {
-	// 定义 dp[i] 表示 以 i 结尾的连续子数组最大和
+	// 定义 dp[i] 表示 以 nums[i] 结尾的连续子数组最大和
 	// dp[0]=nums[0]
 	// dp[i]=max(dp[i-1]+nums[i],nums[i])
 
@@ -57,7 +106,7 @@ func maxSubArray2(nums []int) int {
 
 // lengthOfLIS leetcode 300 最长上升子序列
 func lengthOfLIS(nums []int) int {
-	// 定义 dp[i] 为 以 nums[i] 结尾的最长上升子序列
+	// 定义 dp[i] 为 以 nums[i] 结尾的最长上升子序列的长度
 	// dp[i]=max(dp[0].j.dp[i-1]) + 1 (当 nums[j] < nums[i])
 	// dp[0]=1
 
