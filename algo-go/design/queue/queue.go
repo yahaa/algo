@@ -105,9 +105,11 @@ func (this *MaxQueue) Max_value() int {
 func (this *MaxQueue) Push_back(value int) {
 	this.dataQ.PushBack(value)
 
-	if this.maxQ.Len() == 0 || value >= this.Max_value() {
-		this.maxQ.PushFront(value)
+	for this.maxQ.Len() > 0 && value > this.maxQ.Back().Value.(int) {
+		this.maxQ.Remove(this.maxQ.Back())
 	}
+
+	this.maxQ.PushBack(value)
 }
 
 func (this *MaxQueue) Pop_front() int {
