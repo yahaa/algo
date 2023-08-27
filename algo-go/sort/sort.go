@@ -1,5 +1,11 @@
 package sort
 
+import (
+	"fmt"
+	"sort"
+	"strings"
+)
+
 // MergeSort 归并排序算法
 func MergeSort(a []int) {
 	tmp := make([]int, len(a))
@@ -53,4 +59,27 @@ func mergeSort(a, tmp []int, left, right int) int {
 	}
 
 	return count
+}
+
+// largestNumber leetcode 179 最大的数，排序基本应用
+func largestNumber(nums []int) string {
+	sort.Slice(nums, func(i, j int) bool {
+		a := fmt.Sprintf("%d%d", nums[i], nums[j])
+		b := fmt.Sprintf("%d%d", nums[j], nums[i])
+
+		return a > b
+	})
+
+	var ans string
+	for i := 0; i < len(nums); i++ {
+		ans += fmt.Sprintf("%d", nums[i])
+	}
+
+	ans = strings.TrimLeft(ans, "0")
+
+	if len(ans) == 0 {
+		return "0"
+	}
+
+	return ans
 }
