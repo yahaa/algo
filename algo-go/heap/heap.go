@@ -75,6 +75,31 @@ func (h minHeap) Top() interface{} {
 	return h[0]
 }
 
+func nthUglyNumber(n int) int {
+	h := &minHeap{1}
+	heap.Init(h)
+
+	m := make(map[int]struct{})
+	factors := []int{2, 3, 5}
+	for i := 1; i <= n; i++ {
+		x := heap.Pop(h).(int)
+
+		if i == n {
+			return x
+		}
+
+		for _, f := range factors {
+			n := x * f
+			if _, ok := m[n]; !ok {
+				heap.Push(h, n)
+				m[n] = struct{}{}
+			}
+		}
+	}
+
+	return 0
+}
+
 type maxHeap []int
 
 func (h maxHeap) Len() int {
