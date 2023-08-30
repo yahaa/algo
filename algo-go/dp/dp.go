@@ -6,6 +6,45 @@ import (
 	"strconv"
 )
 
+// maxSubarraySumCircular leetcode 918 环形数组最大子数组和
+func maxSubarraySumCircular(nums []int) int {
+	// 设 dpmax[i] 表示以 nums[i] 结尾的子数组的最大和
+	// 则 dpmax[i] = max(dpmax[i-1]+nusm[i],nums[i])
+	// maxAns=max(maxAns,dpmax[i])
+
+	// 设 dpmin[i] 表示以 nums[i] 结尾的子数组的最小和
+	// 则 dpmin[i] = min(dpmin[i-1]+nums[i],nums[i])
+	// minAns=min(minAns,dpmin[i])
+
+	// res=max(maxAns,sum-minAns)
+
+	dpMax, dpMin, sum := nums[0], nums[0], nums[0]
+	maxAns, minAns := dpMax, dpMin
+
+	for i := 1; i < len(nums); i++ {
+		dpMax = max(dpMax+nums[i], nums[i])
+		dpMin = min(dpMin+nums[i], nums[i])
+
+		maxAns = max(maxAns, dpMax)
+		minAns = min(minAns, dpMin)
+
+		sum += nums[i]
+	}
+
+	if maxAns < 0 {
+		return maxAns
+	}
+
+	return max(maxAns, sum-minAns)
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
 func findMaxValue(nums []int, n int) int {
 	sort.Slice(nums, func(i, j int) bool {
 		return nums[i] > nums[j]
