@@ -1,6 +1,7 @@
 package dp
 
 import (
+	"container/list"
 	"fmt"
 	"sort"
 	"strconv"
@@ -200,4 +201,30 @@ func max(a, b int) int {
 	}
 
 	return b
+}
+
+type index struct {
+	i, j int
+}
+
+func findLongestFromIndex(matrix [][]int, i, j int) int {
+	n, m := len(matrix), len(matrix[0])
+	visit, res := make([][]int, n), 0
+	for i := 0; i < n; i++ {
+		visit[i] = make([]int, m)
+	}
+
+	dir := [][]int{{0, -1}, {0, 1}, {-1, 0}, {1, 0}}
+	_ = dir
+
+	queue := list.New()
+
+	queue.PushBack(index{i, j})
+
+	return res
+
+}
+
+func longestIncreasingPath(matrix [][]int) int {
+	return 0
 }
