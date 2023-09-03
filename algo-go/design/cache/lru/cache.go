@@ -1,5 +1,9 @@
 package lru
 
+import (
+	"container/list"
+)
+
 type node struct {
 	v    int
 	key  int
@@ -109,3 +113,66 @@ func (ru *LRUCache) Put(key int, value int) {
 		ru.dlink.Del(ru.dlink.tail)
 	}
 }
+
+type pair struct {
+	key   int
+	value int
+}
+
+type LRUCache2 struct {
+	capacity int
+	keys     map[int]*list.Element
+	link     *list.List
+}
+
+func Constructor2(capacity int) LRUCache2 {
+	return LRUCache2{
+		capacity: capacity,
+		keys:     make(map[int]*list.Element),
+		link:     list.New(),
+	}
+}
+
+func (this *LRUCache2) Get(key int) int {
+	e, ok := this.keys[key]
+	if !ok {
+		return -1
+	}
+
+	p := e.Value.(pair)
+
+	this.link.Remove(e)
+	delete(this.keys, p.key)
+
+	e = this.link.PushFront(p)
+	this.keys[key] = e
+
+	return p.value
+}
+
+func (this *LRUCache2) Put(key int, value int) {
+	e, ok := this.keys[key]
+	if ok {
+		this.link.Remove(e)
+
+		e = this.link.PushFront(pair{key, value})
+		this.keys[key] = e
+		return
+	}
+
+	e = this.link.PushFront(pair{key, value})
+	this.keys[key] = e
+
+	if this.link.Len() > this.capacity {
+		b := this.link.Back()
+		this.link.Remove(b)
+		delete(this.keys, b.Value.(pair).key)
+	}
+}
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * obj := Constructor(capacity);
+ * param_1 := obj.Get(key);
+ * obj.Put(key,value);
+ */
