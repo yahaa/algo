@@ -1,5 +1,87 @@
 package buffer
 
+// MyCircularQueue leetcode 622. 设计循环队列
+type MyCircularQueue struct {
+	buf   []int
+	size  int
+	count int
+	head  int
+	tail  int
+}
+
+func Constructor(k int) MyCircularQueue {
+	return MyCircularQueue{
+		buf:   make([]int, k),
+		size:  k,
+		count: 0,
+		head:  0,
+		tail:  0,
+	}
+
+}
+
+func (this *MyCircularQueue) EnQueue(value int) bool {
+	if this.count == this.size {
+		return false
+	}
+
+	this.buf[this.tail] = value
+	this.tail = (this.tail + 1) % this.size
+	this.count++
+
+	return true
+}
+
+func (this *MyCircularQueue) DeQueue() bool {
+	if this.count == 0 {
+		return false
+	}
+
+	this.head = (this.head + 1) % this.size
+	this.count--
+	return true
+}
+
+func (this *MyCircularQueue) Front() int {
+	if this.count == 0 {
+		return -1
+	}
+
+	return this.buf[this.head]
+}
+
+func (this *MyCircularQueue) Rear() int {
+	if this.count == 0 {
+		return -1
+	}
+
+	index := this.tail - 1
+	if index == -1 {
+		index = this.size - 1
+	}
+
+	return this.buf[index]
+}
+
+func (this *MyCircularQueue) IsEmpty() bool {
+	return this.count == 0
+}
+
+func (this *MyCircularQueue) IsFull() bool {
+	return this.count == this.size
+}
+
+/**
+ * Your MyCircularQueue object will be instantiated and called as such:
+ * obj := Constructor(k);
+ * param_1 := obj.EnQueue(value);
+ * param_2 := obj.DeQueue();
+ * param_3 := obj.Front();
+ * param_4 := obj.Rear();
+ * param_5 := obj.IsEmpty();
+ * param_6 := obj.IsFull();
+ */
+
 type ringBuffer struct {
 	buf   []int
 	size  int
