@@ -7,11 +7,8 @@ type Node struct {
 	Child *Node
 }
 
+// flatten leetcode 430. 扁平化多级双向链表
 func flatten(root *Node) *Node {
-	if root == nil {
-		return nil
-	}
-
 	p := root
 
 	for p != nil {
