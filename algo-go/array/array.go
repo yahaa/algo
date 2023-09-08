@@ -9,6 +9,41 @@ type Pairs struct {
 	value int
 }
 
+// singleNumber 137. 只出现一次的数字 II(一个数字出现一次，其他数字出现 3 次)
+func singleNumber(nums []int) int {
+	// 2 0000 0010
+	// 2 0000 0010
+	// 2 0000 0010
+	// 3 0000 0011
+	// c 0000 0011
+
+	// 1 0000 0001
+	// 2 0000 0010
+	// 4 0000 0100
+	counts := make([]int, 64)
+
+	for i := 0; i <= 64; i++ {
+		for _, n := range nums {
+			if (n >> i & 1) > 0 {
+				counts[i]++
+			}
+		}
+
+		counts[i] = counts[i] % 3
+	}
+
+	ans := 0
+	base := 1
+	for i := 0; i <= 64; i++ {
+		if counts[i] > 0 {
+			ans |= base
+		}
+		base <<= 1
+	}
+
+	return ans
+}
+
 func twoSum(nums []int, target int) []int {
 	pairs := make([]Pairs, len(nums))
 	for i := 0; i < len(nums); i++ {
