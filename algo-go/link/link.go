@@ -237,6 +237,8 @@ func hasCycle(head *ListNode) bool {
 }
 
 // leetcode  142 环形连标二
+// 2023/9/8 双指针相遇不一定是在第一个节点上, 只能说明有环的存在
+// 添加一个额外指针从 head 遍历，最总 head 遇到 slow 说明当前节点是如环的第一个节点（需要用数学公式来推断）
 func detectCycle(head *ListNode) *ListNode {
 	if head == nil {
 		return nil
