@@ -9,6 +9,21 @@ type Pairs struct {
 	value int
 }
 
+// findDuplicate 287. 寻找重复数
+func findDuplicate(nums []int) int {
+	for i := 0; i < len(nums); i++ {
+		for nums[i] != i+1 && nums[i]-1 < len(nums) {
+			if nums[i] == nums[nums[i]-1] {
+				return nums[i]
+			}
+
+			nums[i], nums[nums[i]-1] = nums[nums[i]-1], nums[i]
+		}
+	}
+
+	return 0
+}
+
 // singleNumber260 leetcode 260. 只出现一次的数字 III(有两个数组出现一次，其余都出现两次)
 func singleNumber260(nums []int) []int {
 	// 1 0000 0001
