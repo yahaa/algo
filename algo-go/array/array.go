@@ -9,6 +9,45 @@ type Pairs struct {
 	value int
 }
 
+// singleNumber260 leetcode 260. 只出现一次的数字 III(有两个数组出现一次，其余都出现两次)
+func singleNumber260(nums []int) []int {
+	// 1 0000 0001
+	// 2 0000 0010
+	//  3 0000 0011
+	//  5 0000 0101
+
+	// 3^5 0000 0110
+
+	// 3和5 第一个不相同的位置 0000 0010
+
+	// 根据第一个不相同的位置分组
+
+	s := 0
+
+	for _, n := range nums {
+		s ^= n
+	}
+
+	d := 1
+	for i := 0; i < 64; i++ {
+		if s&d > 0 {
+			break
+		}
+		d <<= 1
+	}
+
+	a, b := 0, 0
+	for _, n := range nums {
+		if n&d > 0 {
+			a ^= n
+		} else {
+			b ^= n
+		}
+	}
+
+	return []int{a, b}
+}
+
 // singleNumber 137. 只出现一次的数字 II(一个数字出现一次，其他数字出现 3 次)
 func singleNumber(nums []int) int {
 	// 2 0000 0010
