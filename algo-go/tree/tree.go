@@ -27,6 +27,42 @@ func IsUnivalTree(root *Node) bool {
 	return dfs(root, root.Val)
 }
 
+// longestConsecutive 298. 二叉树最长连续序列
+func longestConsecutive(root *TreeNode) int {
+	ans := 0
+
+	var dfs func(root *TreeNode, cur int)
+
+	dfs = func(root *TreeNode, cur int) {
+		if root == nil {
+			return
+		}
+
+		if root.Left != nil {
+			if root.Left.Val == root.Val+1 {
+				dfs(root.Left, cur+1)
+			} else {
+				dfs(root.Left, 1)
+			}
+		}
+
+		if root.Right != nil {
+			if root.Right.Val == root.Val+1 {
+				dfs(root.Right, cur+1)
+			} else {
+				dfs(root.Right, 1)
+			}
+		}
+
+		ans = max(ans, cur)
+	}
+
+	dfs(root, 1)
+
+	return ans
+}
+
+
 // leetcode 589
 type NNode struct {
 	Val      int
