@@ -152,6 +152,38 @@ impl Solution {
         list
     }
 
+    pub fn longest_consecutive(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+        let mut ans = 0;
+
+        fn dfs(root: Option<Rc<RefCell<TreeNode>>>, cur: i32, ans: &mut i32) {
+            match root {
+                Some(r) => {
+                    *ans = std::cmp::max(*ans, cur);
+                    if let Some(left) = r.borrow().left.clone() {
+                        if left.borrow().val == r.borrow().val + 1 {
+                            dfs(Some(left), cur + 1, ans);
+                        } else {
+                            dfs(Some(left), 1, ans);
+                        }
+                    }
+
+                    if let Some(right) = r.borrow().right.clone() {
+                        if right.borrow().val == r.borrow().val + 1 {
+                            dfs(Some(right), cur + 1, ans);
+                        } else {
+                            dfs(Some(right), 1, ans);
+                        }
+                    }
+                }
+                None => return,
+            }
+        }
+
+        dfs(root, 1, &mut ans);
+
+        ans
+    }
+
     // leetcode 124
     pub fn max_path_sum(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
         let mut sum = i32::MIN;
