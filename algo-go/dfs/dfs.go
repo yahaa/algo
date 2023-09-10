@@ -5,6 +5,34 @@ type Node struct {
 	Neighbors []*Node
 }
 
+// generateParenthesis 22. 括号生成
+func generateParenthesis(n int) []string {
+	var dfs func(cur string, l, r int)
+	var ans []string
+
+	dfs = func(cur string, l, r int) {
+		if r < l {
+			return
+		}
+
+		if r == 0 && l == 0 {
+			ans = append(ans, cur)
+		}
+
+		if l > 0 {
+			dfs(cur+"(", l-1, r)
+		}
+
+		if r > 0 {
+			dfs(cur+")", l, r-1)
+		}
+	}
+
+	dfs("", n, n)
+
+	return ans
+}
+
 // letterCombinations 17. 电话号码的字母组合
 func letterCombinations(digits string) []string {
 	mp := map[byte][]string{
