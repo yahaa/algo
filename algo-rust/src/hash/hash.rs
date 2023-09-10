@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 use std::collections::HashMap;
+use std::collections::HashSet;
 
 struct FindSumPairs {
     nums1: Vec<i32>,
@@ -39,6 +40,37 @@ impl FindSumPairs {
 struct Solution {}
 
 impl Solution {
+    // 128. 最长连续序列
+    pub fn longest_consecutive2(nums: Vec<i32>) -> i32 {
+        let mut set = HashSet::new();
+
+        for i in 0..nums.len() {
+            set.insert(nums[i]);
+        }
+
+        let mut ans = 0;
+
+        for n in set.iter() {
+            if !set.contains(&(n - 1)) {
+                let mut cur = *n;
+                let mut cur_len = 1;
+
+                loop {
+                    if !set.contains(&(cur + 1)) {
+                        break;
+                    }
+
+                    cur += 1;
+                    cur_len += 1;
+                }
+
+                ans = std::cmp::max(ans, cur_len);
+            }
+        }
+
+        ans
+    }
+
     // leetcode 217
     pub fn contains_duplicate(nums: Vec<i32>) -> bool {
         let mut map = HashMap::new();
