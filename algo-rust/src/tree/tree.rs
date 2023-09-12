@@ -30,6 +30,20 @@ use std::rc::Rc;
 struct Solution {}
 
 impl Solution {
+    // mirror_tree 剑指 Offer 27. 二叉树的镜像
+    pub fn mirror_tree(root: Option<Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeNode>>> {
+        match root {
+            Some(root) => {
+                let l = Self::mirror_tree(root.borrow().left.clone());
+                let r = Self::mirror_tree(root.borrow().right.clone());
+
+                root.borrow_mut().left = r;
+                root.borrow_mut().right = l;
+                Some(root)
+            }
+            None => None,
+        }
+    }
     // leetcode 222
     pub fn count_nodes_1(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
         return match root {
