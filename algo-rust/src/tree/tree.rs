@@ -19,6 +19,7 @@ impl TreeNode {
     }
 }
 
+use std::borrow::Borrow;
 use std::cell::RefCell;
 use std::cmp::max;
 use std::collections::HashMap;
@@ -30,6 +31,37 @@ use std::rc::Rc;
 struct Solution {}
 
 impl Solution {
+    pub fn is_same_tree(
+        a: Option<Rc<RefCell<TreeNode>>>,
+        b: Option<Rc<RefCell<TreeNode>>>,
+    ) -> bool {
+        match (a, b) {
+            (_, None) => true,
+            (None, _) => false,
+            (Some(a), Some(b)) => {
+                if a.borrow().val != b.borrow().val {
+                    return false;
+                }
+
+                Self::is_same_tree(a.borrow().left.clone(), b.borrow().left.clone())
+                    && Self::is_same_tree(a.borrow().right.clone(), b.borrow().right.clone())
+            }
+        }
+    }
+    pub fn is_sub_structure(
+        a: Option<Rc<RefCell<TreeNode>>>,
+        b: Option<Rc<RefCell<TreeNode>>>,
+    ) -> bool {
+        match (a, b) {
+            (None, _) => false,
+            (_, None) => false,
+            (Some(a), Some(b)) => {
+                Self::is_same_tree(Some(a.clone()), Some(b.clone()))
+                    || Self::is_sub_structure(a.borrow().left.clone(), Some(b.clone()))
+                    || Self::is_sub_structure(a.borrow().right.clone(), Some(b.clone()))
+            }
+        }
+    }
     // mirror_tree 剑指 Offer 27. 二叉树的镜像
     pub fn mirror_tree(root: Option<Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeNode>>> {
         match root {
