@@ -44,6 +44,22 @@ impl PartialOrd for Val {
 }
 
 impl Solution {
+    // 剑指 Offer 03. 数组中重复的数字
+    pub fn find_repeat_number(mut nums: Vec<i32>) -> i32 {
+        for i in 0..nums.len() {
+            while nums[i] as usize != i {
+                if nums[i] == nums[nums[i] as usize] {
+                    return nums[i];
+                }
+
+                let j = nums[i] as usize;
+
+                nums.swap(i, j);
+            }
+        }
+
+        0
+    }
     // leetcode 121
     pub fn max_profit(prices: Vec<i32>) -> i32 {
         let mut min_pri = prices[0];
