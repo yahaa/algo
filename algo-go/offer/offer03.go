@@ -11,3 +11,18 @@ func findRepeatNumber(nums []int) int {
 	}
 	return res
 }
+
+// findRepeatNumber2 剑指 Offer 03. 数组中重复的数字
+func findRepeatNumber2(nums []int) int {
+	for i := 0; i < len(nums); i++ {
+		for nums[i] != i {
+			if nums[i] == nums[nums[i]] {
+				return nums[i]
+			}
+
+			nums[i], nums[nums[i]] = nums[nums[i]], nums[i]
+		}
+	}
+
+	return 0
+}
