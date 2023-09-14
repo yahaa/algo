@@ -9,6 +9,18 @@ type Pairs struct {
 	value int
 }
 
+// runningSum 1480. 一维数组的动态和
+func runningSum(nums []int) []int {
+	res := make([]int, len(nums))
+	sum := 0
+	for i := 0; i < len(nums); i++ {
+		sum += nums[i]
+		res[i] = sum
+	}
+
+	return res
+}
+
 // findDuplicate 287. 寻找重复数
 func findDuplicate(nums []int) int {
 	for i := 0; i < len(nums); i++ {
