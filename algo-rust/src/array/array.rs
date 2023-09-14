@@ -44,6 +44,20 @@ impl PartialOrd for Val {
 }
 
 impl Solution {
+    // 1313. 解压缩编码列表
+    pub fn decompress_rl_elist(nums: Vec<i32>) -> Vec<i32> {
+        let mut res = Vec::new();
+
+        for i in 0..nums.len() / 2 {
+            let (freq, val) = (nums[i * 2], nums[i * 2 + 1]);
+
+            for k in 0..freq {
+                res.push(val);
+            }
+        }
+
+        res
+    }
     // 剑指 Offer 03. 数组中重复的数字
     pub fn find_repeat_number(mut nums: Vec<i32>) -> i32 {
         for i in 0..nums.len() {

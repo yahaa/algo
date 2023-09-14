@@ -9,6 +9,21 @@ type Pairs struct {
 	value int
 }
 
+// decompressRLElist 1313. 解压缩编码列表
+func decompressRLElist(nums []int) []int {
+	res := make([]int, 0)
+
+	for i := 0; i < len(nums)/2; i++ {
+		freq, val := nums[2*i], nums[2*i+1]
+
+		for j := 0; j < freq; j++ {
+			res = append(res, val)
+		}
+	}
+
+	return res
+}
+
 // runningSum 1480. 一维数组的动态和
 func runningSum(nums []int) []int {
 	res := make([]int, len(nums))
