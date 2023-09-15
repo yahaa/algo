@@ -374,6 +374,23 @@ impl Solution {
         true
     }
 
+    // 378. 有序矩阵中第 K 小的元素
+    pub fn kth_smallest(matrix: Vec<Vec<i32>>, k: i32) -> i32 {
+        let mut heap = BinaryHeap::new();
+
+        for row in matrix {
+            for n in row {
+                heap.push(n);
+
+                if heap.len() > k as usize {
+                    heap.pop();
+                }
+            }
+        }
+
+        heap.pop().unwrap()
+    }
+
     // leetcode 630
     pub fn schedule_course(courses: Vec<Vec<i32>>) -> i32 {
         let mut courses = courses;
