@@ -520,3 +520,60 @@ func rearrangeBarcodes(barcodes []int) []int {
 
 	return res
 }
+
+type arrayIndex struct {
+	array *[]int
+	index int
+}
+
+type maxHeap2 []arrayIndex
+
+func (h maxHeap2) Len() int      { return len(h) }
+func (h maxHeap2) Swap(i, j int) { h[i], h[j] = h[j], h[i] }
+func (h maxHeap2) Less(i, j int) bool {
+	return (*h[i].array)[h[i].index] < (*h[j].array)[h[j].index]
+}
+func (h *maxHeap2) Push(v any) {
+	*h = append(*h, v.(arrayIndex))
+}
+func (h *maxHeap2) Pop() any {
+	old := *h
+	n := len(old)
+	res := old[n-1]
+	old = old[:n-1]
+	*h = old
+
+	return res
+}
+
+func kthSmallest2(matrix [][]int, k int) int {
+	h := &maxHeap2{}
+
+	heap.Init(h)
+
+	for i := 0; i < len(matrix); i++ {
+		if len(matrix[i]) == 0 {
+			continue
+		}
+
+		heap.Push(h, arrayIndex{&matrix[i], 0})
+	}
+
+	count := 1
+
+	for count < k {
+		top := heap.Pop(h).(arrayIndex)
+
+		top.index++
+
+		if top.index < len(*top.array) {
+			heap.Push(h, top)
+		}
+
+		count++
+	}
+
+	top := heap.Pop(h).(arrayIndex)
+
+	return (*top.array)[top.index]
+}
