@@ -577,3 +577,59 @@ func kthSmallest2(matrix [][]int, k int) int {
 
 	return (*top.array)[top.index]
 }
+
+type pairs struct {
+	sum int
+	i   int
+	j   int
+}
+
+type minHeap1 []pairs
+
+func (h minHeap1) Len() int           { return len(h) }
+func (h minHeap1) Less(i, j int) bool { return h[i].sum < h[j].sum }
+func (h minHeap1) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+func (h *minHeap1) Push(v any)        { *h = append(*h, v.(pairs)) }
+func (h *minHeap1) Pop() any {
+	old := *h
+	n := len(old)
+	res := old[n-1]
+	old = old[:n-1]
+	*h = old
+
+	return res
+}
+
+// kSmallestPairs 373. 查找和最小的 K 对数字
+func kSmallestPairs(nums1 []int, nums2 []int, k int) [][]int {
+	res := make([][]int, 0)
+	h := &minHeap1{}
+	heap.Init(h)
+	n, m := len(nums1), len(nums2)
+
+	for i := 0; i < n; i++ {
+		heap.Push(h, pairs{nums1[i] + nums2[0], i, 0})
+	}
+
+	for h.Len() > 0 && k > 0 {
+		top := heap.Pop(h).(pairs)
+
+		res = append(res, []int{nums1[top.i], nums2[top.j]})
+		k--
+
+		if top.j+1 < m {
+			heap.Push(h, pairs{nums1[top.i] + nums2[top.j+1], top.i, top.j + 1})
+		}
+	}
+	return res
+}
+
+// [1,1,2] [1,2,3]
+
+// (0,0) (0,1) (0,2)
+// (1,0) (1,1) (1,2)
+// (2,0) (2,1) (2,2)
+
+// (1,1) (1,2) (1,3)
+// (1,1) (1,2) (1,3)
+// (2,1) (2,2) (2,3)
