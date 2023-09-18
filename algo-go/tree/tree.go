@@ -27,6 +27,30 @@ func IsUnivalTree(root *Node) bool {
 	return dfs(root, root.Val)
 }
 
+// rob 337. 打家劫舍 III 树上 dp
+func rob(root *TreeNode) int {
+	r := make(map[*TreeNode]int)
+	s := make(map[*TreeNode]int)
+
+	var dfs func(root *TreeNode)
+
+	dfs = func(root *TreeNode) {
+		if root == nil {
+			return
+		}
+
+		dfs(root.Left)
+		dfs(root.Right)
+
+		r[root] = root.Val + s[root.Left] + s[root.Right]
+		s[root] = max(r[root.Left], s[root.Left]) + max(r[root.Right], s[root.Right])
+	}
+
+	dfs(root)
+
+	return max(r[root], s[root])
+}
+
 // buildTree1 105. 从前序与中序遍历序列构造二叉树
 func buildTree1(preorder []int, inorder []int) *TreeNode {
 	if len(preorder) == 0 || len(inorder) == 0 {
