@@ -27,6 +27,29 @@ func IsUnivalTree(root *Node) bool {
 	return dfs(root, root.Val)
 }
 
+// buildTree 106. 从中序与后序遍历序列构造二叉树
+func buildTree(inorder []int, postorder []int) *TreeNode {
+	if len(inorder) == 0 || len(postorder) == 0 {
+		return nil
+	}
+
+	n := len(postorder)
+
+	root := &TreeNode{
+		Val: postorder[n-1],
+	}
+
+	i := 0
+
+	for inorder[i] != root.Val {
+		i++
+	}
+
+	root.Left = buildTree(inorder[:i], postorder[:i])
+	root.Right = buildTree(inorder[i+1:], postorder[i:n-1])
+	return root
+}
+
 // longestConsecutive 298. 二叉树最长连续序列
 func longestConsecutive(root *TreeNode) int {
 	ans := 0
@@ -61,7 +84,6 @@ func longestConsecutive(root *TreeNode) int {
 
 	return ans
 }
-
 
 // leetcode 589
 type NNode struct {
