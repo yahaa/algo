@@ -229,6 +229,27 @@ func longestIncreasingPath(matrix [][]int) int {
 	return 0
 }
 
+// rob2 213. 打家劫舍 II
+// 思路: 假设数组 nums 的长度为 n
+// 1. 如果不偷窃最后一间房屋，则偷窃房屋的下标范围是 [0,n−2]
+// 2. 如果不偷窃第一间房屋，则偷窃房屋的下标范围是 [1,n−1]
+func rob2(nums []int) int {
+	n := len(nums)
+	if n == 0 {
+		return 0
+	}
+
+	if n == 1 {
+		return nums[0]
+	}
+
+	if n == 2 {
+		return max(nums[0], nums[1])
+	}
+
+	return max(rob(nums[:n-1]), rob(nums[1:]))
+}
+
 // rob 198. 打家劫舍
 func rob(nums []int) int {
 	// dp[i] = max(dp[i-1],dp[i-2]+nums[i])
