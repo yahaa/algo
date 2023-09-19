@@ -108,3 +108,75 @@ func searchRange(nums []int, target int) []int {
 
 	return []int{l, r}
 }
+
+// bSearch 自定义二分查找
+// 找到返回下标，找不到返回 -1
+func bSearch(nums []int, target int) int {
+	l, r := 0, len(nums)
+	for l < r {
+		mid := l + (r-l)/2
+
+		if nums[mid] == target {
+			return mid
+		}
+
+		if nums[mid] < target {
+			l = mid + 1
+		}
+
+		if nums[mid] > target {
+			r = mid
+		}
+	}
+
+	return -1
+}
+
+// search3 33. 搜索旋转排序数组
+// 通过 findMin 找到旋转数组中最小值
+// 把原始数组分为两个有序数组
+// 用二分在两个有序数组中二分查找
+func search3(nums []int, target int) int {
+	if len(nums) == 0 {
+		return -1
+	}
+
+	b := findMin(nums)
+
+	f := nums[0:b]
+	e := nums[b:]
+
+	i := bSearch(f, target)
+
+	if i != -1 {
+		return i
+	}
+
+	i = bSearch(e, target)
+
+	if i != -1 {
+		return len(f) + i
+	}
+
+	return -1
+}
+
+// findMin 剑指 Offer 11. 旋转数组的最小数字思想
+// 返回最小数字的下标
+func findMin(nums []int) int {
+	l, r := 0, len(nums)-1
+
+	for l < r {
+		mid := l + (r-l)/2
+
+		if nums[mid] < nums[r] {
+			r = mid
+		} else if nums[mid] > nums[r] {
+			l = mid + 1
+		} else {
+			r--
+		}
+	}
+
+	return l
+}
