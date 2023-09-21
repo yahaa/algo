@@ -8,6 +8,25 @@ func max(a, b int) int {
 	return b
 }
 
+// distributeCandies leetcode 575. 分糖果
+func distributeCandies(candyType []int) int {
+	mp := map[int]struct{}{}
+
+	for _, n := range candyType {
+		mp[n] = struct{}{}
+	}
+
+	return min(len(candyType)/2, len(mp))
+}
+
+func min(a, b int) int {
+	if a > b {
+		return b
+	}
+
+	return a
+}
+
 // longestConsecutive 128. 最长连续序列
 func longestConsecutive(nums []int) int {
 	set := make(map[int]struct{})
