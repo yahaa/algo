@@ -8,6 +8,32 @@ func max(a, b int) int {
 	return b
 }
 
+// smallerNumbersThanCurrent 1365. 有多少小于当前数字的数字
+// 计数排序
+func smallerNumbersThanCurrent(nums []int) []int {
+	count := make(map[int]int)
+
+	for i := 0; i < len(nums); i++ {
+		count[nums[i]]++
+	}
+
+	for i := 1; i <= 100; i++ {
+		count[i] += count[i-1]
+	}
+
+	result := make([]int, len(nums))
+
+	for i := 0; i < len(nums); i++ {
+		if nums[i] == 0 {
+			result[i] = 0
+		} else {
+			result[i] = count[nums[i]-1]
+		}
+	}
+
+	return result
+}
+
 // distributeCandies leetcode 575. 分糖果
 func distributeCandies(candyType []int) int {
 	mp := map[int]struct{}{}
