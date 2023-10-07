@@ -1,6 +1,9 @@
 package stack
 
-import "container/list"
+import (
+	"container/list"
+	"math"
+)
 
 func longestValidParentheses(s string) int {
 	return 0
@@ -27,4 +30,33 @@ func minOperations(logs []string) int {
 	}
 
 	return stack.Len()
+}
+
+type pair struct {
+	value int
+	index int
+}
+
+type StockSpanner struct {
+	stack  *list.List
+	curDay int
+}
+
+func Constructor() StockSpanner {
+	stack := list.New()
+	stack.PushFront(pair{math.MaxInt, -1})
+	return StockSpanner{
+		stack:  stack,
+		curDay: -1,
+	}
+}
+
+func (this *StockSpanner) Next(price int) int {
+	for price >= this.stack.Front().Value.(pair).value {
+		this.stack.Remove(this.stack.Front())
+	}
+
+	this.curDay++
+	this.stack.PushFront(pair{price, this.curDay})
+	return this.curDay - this.stack.Front().Next().Value.(pair).index
 }
