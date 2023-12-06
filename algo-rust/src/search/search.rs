@@ -8,6 +8,66 @@ use std::{
 struct Solution {}
 
 impl Solution {
+    pub fn find_median_sorted_arrays(nums1: Vec<i32>, nums2: Vec<i32>) -> f64 {
+        let (mut i, mut j, mut k) = (0, 0, 0);
+        let mid = (nums1.len() + nums2.len() + 1) / 2;
+        let mut mid_val = 0;
+
+        while k < mid {
+            match (i < nums1.len(), j < nums2.len()) {
+                (true, true) => {
+                    if nums1[i] < nums2[j] {
+                        mid_val = nums1[i];
+                        i += 1;
+                    } else {
+                        mid_val = nums2[j];
+                        j += 1;
+                    }
+                }
+                (true, false) => {
+                    mid_val = nums1[i];
+                    i += 1;
+                }
+                (false, true) => {
+                    mid_val = nums2[j];
+                    j += 1;
+                }
+                (false, false) => {}
+            }
+
+            k += 1;
+        }
+
+        if (nums1.len() + nums2.len()) % 2 == 1 {
+            return mid_val as f64;
+        }
+
+        let mut mid_val2 = 0;
+
+        match (i < nums1.len(), j < nums2.len()) {
+            (true, true) => {
+                if nums1[i] < nums2[j] {
+                    mid_val2 = nums1[i];
+                    i += 1;
+                } else {
+                    mid_val2 = nums2[j];
+                    j += 1;
+                }
+            }
+            (true, false) => {
+                mid_val2 = nums1[i];
+                i += 1;
+            }
+            (false, true) => {
+                mid_val2 = nums2[j];
+                j += 1;
+            }
+
+            (false, false) => {}
+        }
+
+        return (mid_val + mid_val2) as f64 / 2.0;
+    }
     pub fn count_negatives(grid: Vec<Vec<i32>>) -> i32 {
         let mut res = 0;
         let (mut i, mut j) = (0 as i32, (grid[0].len() - 1) as i32);
