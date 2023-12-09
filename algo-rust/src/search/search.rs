@@ -8,6 +8,25 @@ use std::{
 struct Solution {}
 
 impl Solution {
+    // leetcode 704
+    pub fn search704(nums: Vec<i32>, target: i32) -> i32 {
+        // nums is an increate array
+        let (mut left, mut right) = (0, nums.len() - 1);
+        while left <= right && right < nums.len() {
+            let mid = (left + right) / 2;
+            if nums[mid] == target {
+                return mid as i32;
+            }
+
+            if nums[mid] < target {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+
+        return -1;
+    }
     pub fn find_median_sorted_arrays(nums1: Vec<i32>, nums2: Vec<i32>) -> f64 {
         let (mut i, mut j, mut k) = (0, 0, 0);
         let mid = (nums1.len() + nums2.len() + 1) / 2;
