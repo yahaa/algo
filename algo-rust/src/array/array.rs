@@ -44,6 +44,41 @@ impl PartialOrd for Val {
 }
 
 impl Solution {
+    // leetcode 27 快慢指针
+    pub fn remove_element2(nums: &mut Vec<i32>, val: i32) -> i32 {
+        let (mut fast, mut slow) = (0, 0);
+
+        while fast < nums.len() {
+            if nums[fast] != val {
+                nums[slow] = nums[fast];
+                slow += 1;
+            }
+
+            fast += 1;
+        }
+
+        slow as i32
+    }
+    // leetcode 27 暴力
+    pub fn remove_element(nums: &mut Vec<i32>, val: i32) -> i32 {
+        let mut size = nums.len();
+        let mut i = 0;
+
+        while i < size {
+            if nums[i] == val {
+                for j in i + 1..size {
+                    nums[j - 1] = nums[j];
+                }
+
+                size -= 1;
+            } else {
+                i += 1;
+            }
+        }
+
+        size as i32
+    }
+
     // 1313. 解压缩编码列表
     pub fn decompress_rl_elist(nums: Vec<i32>) -> Vec<i32> {
         let mut res = Vec::new();
