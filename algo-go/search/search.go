@@ -2,6 +2,7 @@ package search
 
 import (
 	"math"
+	"sort"
 )
 
 // search leetcode 704 二分搜索
@@ -179,4 +180,74 @@ func findMin(nums []int) int {
 	}
 
 	return l
+}
+
+// findFirstLess find the first num that less n
+// nums is sort by inc
+func findFirstLess(nums []int, n int) int {
+	for i := len(nums) - 1; i >= 0; i-- {
+		if nums[i] < n {
+			return i
+		}
+	}
+
+	return -1
+}
+
+func splitNum(n int) []int {
+	var res []int
+	for n > 0 {
+		res = append(res, n%10)
+		n /= 10
+	}
+
+	return res
+}
+
+func intoSet(nums []int) map[int]struct{} {
+	res := make(map[int]struct{})
+	for _, item := range nums {
+		res[item] = struct{}{}
+	}
+
+	return res
+}
+
+// solve 小于 n 的最大整数
+func solve(n int, nums []int) []int {
+	// 1. sort nums
+	sort.Ints(nums)
+	// 2. split n by one by one
+	nn := splitNum(n)
+	// 3. set nums into set use for quick check weather it is exist
+	numSet := intoSet(nums)
+
+	tnums := make([]int, len(nn))
+
+	for i := len(nn) - 1; i >= 0; i-- {
+		if _, ok := numSet[nn[i]]; ok && i > 0 {
+			tnums[i] = nn[i]
+			continue
+		}
+
+		if index := findFirstLess(nums, nn[i]); index >= 0 {
+			tnums[i] = nums[index]
+			break
+		}
+		// 回溯
+		for i++; i < len(nn); i++ {
+			tnums[i] = 0
+			if index := findFirstLess(nums, nn[i]); index >= 0 {
+				tnums[i] = nums[index]
+				break
+			}
+
+			if i == len(nn)-1 {
+				tnums = tnums[:len(tnums)-1]
+			}
+		}
+		break
+	}
+
+	return tnums
 }
