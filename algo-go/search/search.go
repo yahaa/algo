@@ -251,3 +251,45 @@ func solve(n int, nums []int) []int {
 
 	return tnums
 }
+
+// partition leetcode 131 递归回塑 分割回文串
+func partition(s string) [][]string {
+	var result [][]string
+	var dfs func(start int, path []string)
+
+	dfs = func(start int, path []string) {
+		if start >= len(s) {
+			tmp := make([]string, len(path))
+			copy(tmp, path)
+			result = append(result, tmp)
+
+			return
+		}
+
+		for i := start; i < len(s); i++ {
+			if check(s, start, i) {
+				sub := s[start : i+1]
+				path = append(path, sub)
+			} else {
+				continue
+			}
+
+			dfs(i+1, path)
+			path = path[:len(path)-1]
+		}
+	}
+
+	dfs(0, []string{})
+
+	return result
+}
+
+func check(s string, start, end int) bool {
+	for i, j := start, end; i < j; i, j = i+1, j-1 {
+		if s[i] != s[j] {
+			return false
+		}
+	}
+
+	return true
+}
