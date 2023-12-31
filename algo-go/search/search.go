@@ -3,6 +3,8 @@ package search
 import (
 	"math"
 	"sort"
+	"strconv"
+	"strings"
 )
 
 // search leetcode 704 二分搜索
@@ -289,6 +291,60 @@ func check(s string, start, end int) bool {
 		if s[i] != s[j] {
 			return false
 		}
+	}
+
+	return true
+}
+
+// restoreIpAddresses leetcode 93. 复原 IP 地址
+func restoreIpAddresses(s string) []string {
+	var result []string
+	var dfs func(start, dots int, path []string)
+
+	dfs = func(start, dots int, path []string) {
+		if dots == 3 {
+			if isValida(s[start:len(s)]) {
+				path = append(path, s[start:len(s)])
+				result = append(result, strings.Join(path, ""))
+			}
+
+			return
+		}
+
+		for i := start; i < len(s); i++ {
+			if isValida(s[start : i+1]) {
+				path = append(path, s[start:i+1], ".")
+				dots++
+				dfs(i+1, dots, path)
+				path = path[:len(path)-2]
+				dots--
+			} else {
+				break
+			}
+		}
+	}
+
+	dfs(0, 0, []string{})
+
+	return result
+}
+
+func isValida(s string) bool {
+	if len(s) > 3 || len(s) == 0 {
+		return false
+	}
+
+	if len(s) > 1 && s[0] == '0' {
+		return false
+	}
+
+	n, err := strconv.Atoi(s)
+	if err != nil {
+		return false
+	}
+
+	if n >= 256 {
+		return false
 	}
 
 	return true
