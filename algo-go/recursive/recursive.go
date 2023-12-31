@@ -615,3 +615,37 @@ func combinationSum2(candidates []int, target int) [][]int {
 	dfs([]int{}, target, 0)
 	return ans
 }
+
+// findSubsequences leetcode 491 非递减子序列
+func findSubsequences(nums []int) [][]int {
+	var result [][]int
+	var dfs func(path []int, start int)
+
+	dfs = func(path []int, start int) {
+		if len(path) >= 2 {
+			tmp := make([]int, len(path))
+			copy(tmp, path)
+			result = append(result, tmp)
+		}
+
+		used := make(map[int]bool, len(nums))
+		for i := start; i < len(nums); i++ {
+			if used[nums[i]] { // 去重
+				continue
+			}
+
+			if len(path) == 0 || nums[i] >= path[len(path)-1] {
+				path = append(path, nums[i])
+				used[nums[i]] = true
+				dfs(path, i+1)
+				path = path[:len(path)-1]
+			} else {
+				continue
+			}
+		}
+	}
+
+	dfs([]int{}, 0)
+
+	return result
+}
