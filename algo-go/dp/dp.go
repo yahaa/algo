@@ -273,3 +273,19 @@ func rob(nums []int) int {
 
 	return dp[len(nums)-1]
 }
+
+// minCostClimbingStairs leetcode 746. 使用最小花费爬楼梯
+func minCostClimbingStairs(cost []int) int {
+	// 1. 设置 dp[i] 为爬到第 i 个台阶需要花费的最小体力
+	// 2. dp[i]=min(dp[i-1]+cost[i-1],dp[i-2]+cost[i-2])
+	// 3. dp[0]=0 dp[1]=0
+	// 4. i>=2 开始便利
+
+	dp := make([]int, len(cost)+1)
+
+	for i := 2; i <= len(cost); i++ {
+		dp[i] = min(dp[i-1]+cost[i-1], dp[i-2]+cost[i-2])
+	}
+
+	return dp[len(cost)]
+}
